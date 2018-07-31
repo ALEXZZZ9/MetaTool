@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>57a411d9-7063-40f1-8838-79c9632c15a6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>AX9.MetaTool</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AciData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AcidData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\FsAccessFlagPresetEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\MemoryMapPermissionEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\MemoryMapTypeEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\ProcessAddressSpacesEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\ProgramTypeEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\SaveDataAccessibilityEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DefaultModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\FaDataModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)KernelCapabilityFlag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\FaDescriptorModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcDataModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcDescriptorModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcEnableSystemCallsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcHandleTableSizeModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcIoMemoryMapModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcKernelVersionModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcMemoryMapModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcMiscFlags.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcMiscParamsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcThreadInfoModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DescModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SaDataModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SaDescriptorModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SaEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SaveDataOwnerId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Structs\AcidHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Structs\AciHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Structs\NpdmHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Npdm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\SystemCallsEnum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
+  </ItemGroup>
+</Project>

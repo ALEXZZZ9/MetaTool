@@ -1,0 +1,42 @@
+﻿namespace AX9.MetaTool.Enums
+{
+    public enum FsAccessFlagPresetEnum : ulong
+    {
+        ApplicationInfo = 1UL << 0,
+        BootModeControl = 1UL << 1,
+        Calibration = 1UL << 2,
+        SystemSaveData = 1UL << 3,
+        GameCard = 1UL << 4,
+        SaveDataBackUp = 1UL << 5,
+        SaveDataManagement = 1UL << 6,
+        BisAllRaw = 1UL << 7,
+        GameCardRaw = 1UL << 8,
+        GameCardPrivate = 1UL << 9,
+        SetTime = 1UL << 10,
+        ContentManager = 1UL << 11,
+        ImageManager = 1UL << 12,
+        CreateSaveData = 1UL << 13,
+        SystemSaveDataManagement = 1UL << 14,
+        BisFileSystem = 1UL << 15,
+        SystemUpdate = 1UL << 16,
+        SaveDataMeta = 1UL << 17,
+        DeviceSaveData = 1UL << 18,
+        SettingsControl = 1UL << 19,
+        SystemData = 1UL << 20,
+        SdCard = 1UL << 21,
+        Host = 1UL << 22,
+        FillBis = 1UL << 23,
+        CorruptSaveData = 1UL << 24,
+        SaveDataForDebug = 1UL << 25,
+        FormatSdCard = 1UL << 26,
+        GetRightsId = 1UL << 27,
+        RegisterExternalKey = 1UL << 28,
+        RegisterUpdatePartition = 1UL << 29,
+        SaveDataTransfer = 1UL << 30,
+        DeviceDetection = 1UL << 31,
+        AccessFailureResolution = 1UL << 32,
+        SaveDataTransferVersion2 = 1UL << 33,
+        Debug = 1UL << 999998, // 0x4000000000000000,
+        FullPermission = 1UL << 999999, // 0x8000000000000000
+    }
+}
