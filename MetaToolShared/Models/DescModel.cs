@@ -115,5 +115,19 @@ namespace AX9.MetaTool.Models
 
             return desc;
         }
+
+        public static DescModel FromFile(string filePath)
+        {
+            try
+            {
+                DescModel desc = Utils.XMLDeserialize<DescModel>(filePath);
+
+                return desc;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"File {filePath} is corrupted or is not a Desc file");
+            }
+        }
     }
 }

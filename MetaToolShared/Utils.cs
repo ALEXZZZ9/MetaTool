@@ -46,25 +46,34 @@ namespace AX9.MetaTool
         public static string XMLSerialize<T>(this T value)
         {
             if (value == null) return string.Empty;
-            try
-            {
-                var xmlserializer = new XmlSerializer(typeof(T));
-                var stringWriter = new Utf8StringWriter();
-                var emptyNs = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
 
-                using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings()
-                {
-                    Indent = true,
-                    Encoding = Encoding.UTF8
-                }))
-                {
-                    xmlserializer.Serialize(writer, value, emptyNs);
-                    return stringWriter.ToString();
-                }
-            }
-            catch (Exception ex)
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            Utf8StringWriter stringWriter = new Utf8StringWriter();
+            XmlSerializerNamespaces emptyNs = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+
+            using (XmlWriter writer = XmlWriter.Create(stringWriter, new XmlWriterSettings
             {
-                throw new Exception("An error occurred", ex);
+                Indent = true,
+                Encoding = Encoding.UTF8
+            }))
+            {
+                xmlSerializer.Serialize(writer, value, emptyNs);
+                return stringWriter.ToString();
+            }
+        }
+
+        public static T XMLDeserialize<T>(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) return default(T);
+
+            using (StreamReader reader = new StreamReader(filePath, Encoding.UTF8, true))
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+
+
+                T obj = (T)xmlSerializer.Deserialize(reader);
+                reader.Close();
+                return obj;
             }
         }
 
