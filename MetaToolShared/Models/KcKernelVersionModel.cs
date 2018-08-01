@@ -6,6 +6,13 @@ namespace AX9.MetaTool.Models
     [XmlRoot("KernelVersion")]
     public class KcKernelVersionModel
     {
+        public KcKernelVersionModel()
+        {
+            MajorVersionVlaue = 3;
+            MinorVersionVlaue = 0;
+        }
+
+
         [XmlIgnore]
         public ushort MajorVersionVlaue
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 using AX9.MetaTool.Enums;
 
@@ -9,10 +10,13 @@ namespace AX9.MetaTool.Models
     public class KcDescriptorModel
     {
         [XmlElement("ThreadInfo")]
-        public KcThreadInfoModel ThreadInfo { get; set; }
+        public KcThreadInfoModel ThreadInfo { get; set; } = new KcThreadInfoModel();
+
+        [XmlIgnore]
+        public List<byte> SystemCallList => EnableSystemCalls?.Select((sc) => sc.SystemCallIdValue).ToList();
 
         [XmlElement("EnableSystemCalls")]
-        public List<KcEnableSystemCallsModel> EnableSystemCalls { get; set; }
+        public List<KcEnableSystemCallsModel> EnableSystemCalls { get; set; } = new List<KcEnableSystemCallsModel>();
 
         [XmlElement("MemoryMap")]
         public List<KcMemoryMapModel> MemoryMap { get; set; }
@@ -24,10 +28,10 @@ namespace AX9.MetaTool.Models
         public List<string> EnableInterrupts { get; set; }
 
         [XmlElement("MiscParams")]
-        public KcMiscParamsModel MiscParams { get; set; }
+        public KcMiscParamsModel MiscParams { get; set; } = new KcMiscParamsModel();
 
         [XmlElement("KernelVersion")]
-        public KcKernelVersionModel KernelVersion { get; set; }
+        public KcKernelVersionModel KernelVersion { get; set; } = new KcKernelVersionModel();
 
         [XmlIgnore]
         public KcHandleTableSizeModel HandleTableSizeValue { get; set; } = new KcHandleTableSizeModel();
@@ -46,9 +50,6 @@ namespace AX9.MetaTool.Models
 
         [XmlElement("MiscFlags")]
         public KcMiscFlags MiscFlags { get; set; }
-
-        [XmlIgnore]
-        public List<byte> SystemCallList { get; set; } = new List<byte>();
 
 
         // Thanks SciresM for https://github.com/SciresM/hactool/blob/bdbd4f639ec7c1573a74c6c4cfa7b47801f23217/npdm.c#L269
@@ -95,7 +96,6 @@ namespace AX9.MetaTool.Models
                         break;
                     case 4: // Syscall mask
                         if (kcDescriptor.EnableSystemCalls == null) kcDescriptor.EnableSystemCalls = new List<KcEnableSystemCallsModel>();
-                        if (kcDescriptor.SystemCallList == null) kcDescriptor.SystemCallList = new List<byte>();
 
                         string[] systemCalls = Enum.GetNames(typeof(SystemCallsEnum));
                         uint syscallBase = (desc >> 24) * 0x18;
@@ -112,7 +112,7 @@ namespace AX9.MetaTool.Models
                                 if (!kcDescriptor.EnableSystemCalls.Contains(sCI))
                                 {
                                     kcDescriptor.EnableSystemCalls.Add(sCI);
-                                    kcDescriptor.SystemCallList.Add(sCI.SystemCallIdValue);
+                                    //kcDescriptor.SystemCallList.Add(sCI.SystemCallIdValue);
                                 }
                             }
                          

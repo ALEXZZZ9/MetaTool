@@ -45,6 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DescEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DescEditor.Designer.cs">
+      <DependentUpon>DescEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\AcidTypeEnum.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -53,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DescEditor.resx">
+      <DependentUpon>DescEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

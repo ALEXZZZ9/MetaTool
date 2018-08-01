@@ -16,7 +16,7 @@ namespace AX9.MetaToolGUI
 
         private async void MB_NpdmToDesc_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog oFD = new OpenFileDialog()
+            using (OpenFileDialog oFD = new OpenFileDialog
             {
                 Filter = "NPDM files|*.npdm",
                 RestoreDirectory = true
@@ -51,6 +51,39 @@ namespace AX9.MetaToolGUI
                     }
                 }
             }
+        }
+
+        private void MB_EditDesc_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog oFD = new OpenFileDialog()
+            {
+                Filter = "DESC files|*.desc",
+                RestoreDirectory = true
+            })
+            {
+                if (oFD.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        DescModel desc = DescModel.FromFile(oFD.FileName);
+
+                        new DescEditor(desc, oFD.FileName).Show();
+                        this.Hide();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void MB_CreateDesc_Click(object sender, EventArgs e)
+        {
+            DescModel desc = new DescModel();
+
+            new DescEditor(desc).Show();
+            this.Hide();
         }
     }
 }

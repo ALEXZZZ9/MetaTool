@@ -1,5 +1,8 @@
-﻿namespace AX9.MetaTool.Enums
+﻿using System;
+
+namespace AX9.MetaTool.Enums
 {
+    [Flags]
     public enum ProcessAddressSpacesEnum : byte
     {
         AddressSpace32Bit = 0,

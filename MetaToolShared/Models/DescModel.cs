@@ -8,6 +8,14 @@ namespace AX9.MetaTool.Models
     [XmlRoot("Desc")]
     public class DescModel
     {
+        public DescModel()
+        {
+            MemoryRegion = 0;
+            ProgramIdMinValue = 0x0100000000010000;
+            ProgramIdMaxValue = 0x01FFFFFFFFFFFFFF;
+        }
+
+
         [XmlElement("MemoryRegion")]
         public byte MemoryRegion { get; set; }
 
@@ -60,16 +68,16 @@ namespace AX9.MetaTool.Models
         }
 
         [XmlElement("FsAccessControlDescriptor")]
-        public FaDescriptorModel FsAccessControlDescriptor { get; set; }
+        public FaDescriptorModel FsAccessControlDescriptor { get; set; } = new FaDescriptorModel();
 
         [XmlElement("SrvAccessControlDescriptor")]
-        public SaDescriptorModel SrvAccessControlDescriptor { get; set; }
+        public SaDescriptorModel SrvAccessControlDescriptor { get; set; } = new SaDescriptorModel();
 
         [XmlElement("KernelCapabilityDescriptor")]
-        public KcDescriptorModel KernelCapabilityDescriptor { get; set; }
+        public KcDescriptorModel KernelCapabilityDescriptor { get; set; } = new KcDescriptorModel();
 
         [XmlElement("Default", IsNullable = false)]
-        public DefaultModel Default { get; set; }
+        public DefaultModel Default { get; set; } = new DefaultModel();
 
         [XmlElement("RSAKeyValue")]
         public RSAParameters RSAKeyValue { get; set; }

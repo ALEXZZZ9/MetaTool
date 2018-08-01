@@ -6,6 +6,12 @@ namespace AX9.MetaTool.Models
     [XmlRoot("MiscParams")]
     public class KcMiscParamsModel
     {
+        public KcMiscParamsModel()
+        {
+            ProgramTypeValue = ProgramTypeEnum.Application;
+        }
+
+
         [XmlIgnore]
         public ProgramTypeEnum ProgramTypeValue
         {

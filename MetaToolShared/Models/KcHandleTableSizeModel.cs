@@ -5,6 +5,12 @@ namespace AX9.MetaTool.Models
 {
     public class KcHandleTableSizeModel
     {
+        public KcHandleTableSizeModel()
+        {
+            handleTableSize = 512;
+        }
+
+
         [XmlElement("HandleTableSize")]
         public ushort HandleTableSize
         {

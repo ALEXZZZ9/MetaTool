@@ -7,6 +7,15 @@ namespace AX9.MetaTool.Models
 {
     public class DefaultModel
     {
+        public DefaultModel()
+        {
+            MainThreadPriorityValue = 44;
+            MainThreadCoreNumberValue = 0;
+            MainThreadStackSizeValue = 0x100000;
+            ProcessAddressSpaceValue = ProcessAddressSpacesEnum.AddressSpace64Bit;
+        }
+
+
         [XmlIgnore]
         public bool Is64BitInstructionValue
         {
@@ -31,6 +40,18 @@ namespace AX9.MetaTool.Models
             }
         }
 
+        [XmlIgnore]
+        public ProcessAddressSpacesEnum ProcessAddressSpaceValue
+        {
+            get => processAddressSpaceValue;
+            set
+            {
+                processAddressSpace = value.ToString();
+                Is64BitInstructionValue = (value == (ProcessAddressSpacesEnum.AddressSpace64Bit | ProcessAddressSpacesEnum.AddressSpace64BitOld));
+                processAddressSpaceValue = value;
+            }
+        }
+
         [XmlElement("ProcessAddressSpace", IsNullable = false)]
         public string ProcessAddressSpace
         {
@@ -39,6 +60,8 @@ namespace AX9.MetaTool.Models
             {
                 if (!Enum.GetNames(typeof(ProcessAddressSpacesEnum)).Contains(value)) throw new ArgumentException($"Specified an invalid string, {value}, in Default/ProcessAddressSpace");
 
+                processAddressSpaceValue = (ProcessAddressSpacesEnum)Enum.Parse(typeof(ProcessAddressSpacesEnum), value);
+                Is64BitInstructionValue = (processAddressSpaceValue == (ProcessAddressSpacesEnum.AddressSpace64Bit | ProcessAddressSpacesEnum.AddressSpace64BitOld));
                 processAddressSpace = value;
             }
         }
@@ -137,6 +160,7 @@ namespace AX9.MetaTool.Models
 
         private bool is64BitInstructionValue;
         private string is64BitInstruction;
+        private ProcessAddressSpacesEnum processAddressSpaceValue;
         private string processAddressSpace;
         private byte mainThreadPriorityValue;
         private string mainThreadPriority;

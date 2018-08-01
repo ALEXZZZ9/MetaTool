@@ -6,6 +6,15 @@ namespace AX9.MetaTool.Models
     [XmlRoot("ThreadInfo")]
     public class KcThreadInfoModel
     {
+        public KcThreadInfoModel()
+        {
+            HighestPriorityValue = 59;
+            LowestPriorityValue = 28;
+            MinCoreNumberValue = 0;
+            MaxCoreNumberValue = 2;
+        }
+
+
         [XmlIgnore]
         public byte LowestPriorityValue
         {

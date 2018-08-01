@@ -5,6 +5,18 @@ namespace AX9.MetaTool.Models
     [XmlRoot("MiscFlags")]
     public class KcMiscFlags
     {
+        public KcMiscFlags()
+        {
+            EnableDebugValue = false;
+            ForceDebugValue = false;
+        }
+        public KcMiscFlags(bool enableDebug, bool forceDebug)
+        {
+            EnableDebugValue = enableDebug;
+            ForceDebugValue = forceDebug;
+        }
+
+
         [XmlIgnore]
         public bool EnableDebugValue
         {

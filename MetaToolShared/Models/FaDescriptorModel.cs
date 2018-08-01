@@ -9,8 +9,14 @@ namespace AX9.MetaTool.Models
     [XmlRoot("FsAccessControlDescriptor")]
     public class FaDescriptorModel
     {
+        public FaDescriptorModel()
+        {
+            Version = 1;
+        }
+
+
         [XmlIgnore]
-        public byte Version = 1;
+        public byte Version;
 
         [XmlIgnore]
         public ulong FlagPresetsBit;
