@@ -13,16 +13,13 @@ namespace AX9.MetaToolGUI
             InitializeComponent();
         }
 
-        private async void MMS_Menu_File_Open_Click(object sender, EventArgs e)
-        {
-        }
 
         private async void MB_NpdmToDesc_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog oFD = new OpenFileDialog()
             {
                 Filter = "NPDM/DESC|*.npdm;*.desc|NPDM files|*.npdm|DESC files|*.desc|All Files|*.*",
-                RestoreDirectory = true,
+                RestoreDirectory = true
             })
             {
                 if (oFD.ShowDialog() == DialogResult.OK)
@@ -35,12 +32,12 @@ namespace AX9.MetaToolGUI
 
                         DescModel desc = DescModel.FromNpdm(npdm);
 
-                        using (SaveFileDialog sFD = new SaveFileDialog()
+                        using (SaveFileDialog sFD = new SaveFileDialog
                         {
                             Filter = "DESC files|*.desc|All Files|*.*",
                             RestoreDirectory = true,
                             FileName = Path.ChangeExtension(inputFile.FullName, ".desc")
-                    })
+                        })
                         {
                             if (sFD.ShowDialog() == DialogResult.OK)
                             {

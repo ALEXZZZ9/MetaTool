@@ -28,38 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.MMS_Menu = new System.Windows.Forms.MenuStrip();
-            this.MMS_Menu_File = new System.Windows.Forms.ToolStripMenuItem();
-            this.MMS_Menu_File_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.MB_NpdmToDesc = new System.Windows.Forms.Button();
-            this.MMS_Menu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // MMS_Menu
-            // 
-            this.MMS_Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MMS_Menu_File});
-            this.MMS_Menu.Location = new System.Drawing.Point(0, 0);
-            this.MMS_Menu.Name = "MMS_Menu";
-            this.MMS_Menu.Size = new System.Drawing.Size(184, 24);
-            this.MMS_Menu.TabIndex = 4;
-            this.MMS_Menu.Text = "menuStrip1";
-            this.MMS_Menu.Visible = false;
-            // 
-            // MMS_Menu_File
-            // 
-            this.MMS_Menu_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MMS_Menu_File_Open});
-            this.MMS_Menu_File.Name = "MMS_Menu_File";
-            this.MMS_Menu_File.Size = new System.Drawing.Size(37, 20);
-            this.MMS_Menu_File.Text = "File";
-            // 
-            // MMS_Menu_File_Open
-            // 
-            this.MMS_Menu_File_Open.Name = "MMS_Menu_File_Open";
-            this.MMS_Menu_File_Open.Size = new System.Drawing.Size(174, 22);
-            this.MMS_Menu_File_Open.Text = "Open NPDM/DESC";
-            this.MMS_Menu_File_Open.Click += new System.EventHandler(this.MMS_Menu_File_Open_Click);
             // 
             // MB_NpdmToDesc
             // 
@@ -77,24 +47,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(184, 111);
             this.Controls.Add(this.MB_NpdmToDesc);
-            this.Controls.Add(this.MMS_Menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MainMenuStrip = this.MMS_Menu;
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MetaTool By ALEXZZZ9";
-            this.MMS_Menu.ResumeLayout(false);
-            this.MMS_Menu.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.MenuStrip MMS_Menu;
-        private System.Windows.Forms.ToolStripMenuItem MMS_Menu_File;
-        private System.Windows.Forms.ToolStripMenuItem MMS_Menu_File_Open;
         private System.Windows.Forms.Button MB_NpdmToDesc;
     }
 }
