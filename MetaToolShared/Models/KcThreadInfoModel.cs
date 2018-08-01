@@ -123,7 +123,7 @@ namespace AX9.MetaTool.Models
         private byte maxCoreNumberValue;
         private string maxCoreNumber;
 
-        private readonly KernelCapabilityFlag сapability = new KernelCapabilityFlag { EntryNumber = 3u };
+        private readonly KcFlagModel сapability = new KcFlagModel { EntryNumber = 3u };
 
 
         public uint CalcFlag()

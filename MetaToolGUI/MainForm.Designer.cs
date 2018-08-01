@@ -33,9 +33,9 @@
             // 
             // MB_NpdmToDesc
             // 
-            this.MB_NpdmToDesc.Location = new System.Drawing.Point(42, 30);
+            this.MB_NpdmToDesc.Location = new System.Drawing.Point(12, 12);
             this.MB_NpdmToDesc.Name = "MB_NpdmToDesc";
-            this.MB_NpdmToDesc.Size = new System.Drawing.Size(100, 50);
+            this.MB_NpdmToDesc.Size = new System.Drawing.Size(260, 45);
             this.MB_NpdmToDesc.TabIndex = 5;
             this.MB_NpdmToDesc.Text = ".NPDM -> .DESC";
             this.MB_NpdmToDesc.UseVisualStyleBackColor = true;
@@ -45,7 +45,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(184, 111);
+            this.ClientSize = new System.Drawing.Size(284, 71);
             this.Controls.Add(this.MB_NpdmToDesc);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;

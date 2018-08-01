@@ -1,22 +1,22 @@
 ﻿using AX9.MetaTool.Structs;
 
-namespace AX9.MetaTool
+namespace AX9.MetaTool.Models
 {
-    public class AcidData
+    public class AcidModel
     {
         public AcidHeader Header = new AcidHeader();
         public byte[] ACID = new byte[0];
 
 
-        public static AcidData FromNpdm(byte[] acid)
+        public static AcidModel FromNpdm(byte[] acid)
         {
-            AcidData aCIDData = new AcidData
+            AcidModel aCidModel = new AcidModel
             {
                 Header = acid.ToType<AcidHeader>(),
                 ACID = acid
             };
 
-            return aCIDData;
+            return aCidModel;
         }
     }
 }

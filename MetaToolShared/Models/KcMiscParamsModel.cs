@@ -34,7 +34,7 @@ namespace AX9.MetaTool.Models
         private ProgramTypeEnum programTypeValue;
         private string programType;
 
-        private readonly KernelCapabilityFlag capability = new KernelCapabilityFlag { EntryNumber = 13u };
+        private readonly KcFlagModel capability = new KcFlagModel { EntryNumber = 13u };
 
 
         public uint CalcFlag()

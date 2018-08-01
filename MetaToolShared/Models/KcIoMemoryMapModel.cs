@@ -36,7 +36,7 @@ namespace AX9.MetaTool.Models
         private ulong beginAddressValue;
         private string beginAddress;
 
-        private readonly KernelCapabilityFlag capability = new KernelCapabilityFlag { EntryNumber = 7u };
+        private readonly KcFlagModel capability = new KcFlagModel { EntryNumber = 7u };
 
 
         public uint CalcFlag()

@@ -119,8 +119,8 @@ namespace AX9.MetaTool.Models
         private MemoryMapTypeEnum typeValue;
         private string type;
 
-        private readonly KernelCapabilityFlag addrCapability = new KernelCapabilityFlag { EntryNumber = 6u };
-        private readonly KernelCapabilityFlag sizeCapability = new KernelCapabilityFlag { EntryNumber = 6u };
+        private readonly KcFlagModel addrCapability = new KcFlagModel { EntryNumber = 6u };
+        private readonly KcFlagModel sizeCapability = new KcFlagModel { EntryNumber = 6u };
 
 
         public uint[] CalcFlag()

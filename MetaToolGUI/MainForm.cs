@@ -18,7 +18,7 @@ namespace AX9.MetaToolGUI
         {
             using (OpenFileDialog oFD = new OpenFileDialog()
             {
-                Filter = "NPDM/DESC|*.npdm;*.desc|NPDM files|*.npdm|DESC files|*.desc|All Files|*.*",
+                Filter = "NPDM files|*.npdm",
                 RestoreDirectory = true
             })
             {
@@ -28,7 +28,7 @@ namespace AX9.MetaToolGUI
 
                     if (inputFile.Extension == ".npdm")
                     {
-                        Npdm npdm = await Npdm.FromNpdmFile(oFD.FileName);
+                        NpdmModel npdm = await NpdmModel.FromNpdmFile(oFD.FileName);
 
                         DescModel desc = DescModel.FromNpdm(npdm);
 

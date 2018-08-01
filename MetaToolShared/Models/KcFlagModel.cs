@@ -1,6 +1,6 @@
-﻿namespace AX9.MetaTool
+﻿namespace AX9.MetaTool.Models
 {
-    public class KernelCapabilityFlag
+    public class KcFlagModel
     {
         public uint FieldValue { get; set; }
 

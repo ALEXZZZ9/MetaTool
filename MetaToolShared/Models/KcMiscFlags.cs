@@ -59,7 +59,7 @@ namespace AX9.MetaTool.Models
         private bool forceDebugValue;
         private string forceDebug;
 
-        private readonly KernelCapabilityFlag capability = new KernelCapabilityFlag { EntryNumber = 16u };
+        private readonly KcFlagModel capability = new KcFlagModel { EntryNumber = 16u };
 
 
         public uint CalcFlag()

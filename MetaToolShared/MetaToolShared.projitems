@@ -9,8 +9,8 @@
     <Import_RootNamespace>AX9.MetaTool</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AciData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AcidData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AciModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AcidModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\FsAccessFlagPresetEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\MemoryMapPermissionEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\MemoryMapTypeEnum.cs" />
@@ -19,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\SaveDataAccessibilityEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DefaultModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\FaDataModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)KernelCapabilityFlag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\KcFlagModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\FaDescriptorModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\KcDataModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\KcDescriptorModel.cs" />
@@ -39,7 +39,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Structs\AcidHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Structs\AciHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Structs\NpdmHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Npdm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\NpdmModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\SystemCallsEnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils.cs" />
   </ItemGroup>

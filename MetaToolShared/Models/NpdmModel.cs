@@ -2,19 +2,19 @@
 using System.Threading.Tasks;
 using AX9.MetaTool.Structs;
 
-namespace AX9.MetaTool
+namespace AX9.MetaTool.Models
 {
-    public class Npdm
+    public class NpdmModel
     {
         public NpdmHeader Header = new NpdmHeader();
-        public AciData ACIData = new AciData();
-        public AcidData ACIDData = new AcidData();
+        public AciModel AciModel = new AciModel();
+        public AcidModel AcidModel = new AcidModel();
 
-        public static async Task<Npdm> FromNpdmFile(string filePatch)
+        public static async Task<NpdmModel> FromNpdmFile(string filePatch)
         {
             using (Stream stream = File.OpenRead(filePatch))
             {
-                Npdm npdm = new Npdm { Header = stream.ToType<NpdmHeader>() };
+                NpdmModel npdm = new NpdmModel { Header = stream.ToType<NpdmHeader>() };
 
                 byte[] acidBytes = new byte[npdm.Header.AcidSize];
                 stream.Seek(npdm.Header.AcidOffset, SeekOrigin.Begin);
@@ -26,8 +26,8 @@ namespace AX9.MetaTool
 
                 stream.Close();
 
-                npdm.ACIData = AciData.FromNpdm(aciBytes);
-                npdm.ACIDData = AcidData.FromNpdm(acidBytes);
+                npdm.AciModel = AciModel.FromNpdm(aciBytes);
+                npdm.AcidModel = AcidModel.FromNpdm(acidBytes);
 
                 return npdm;
             }

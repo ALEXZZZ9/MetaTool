@@ -21,7 +21,7 @@ namespace AX9.MetaTool.Models
 
         private ushort handleTableSize;
 
-        private readonly KernelCapabilityFlag capability = new KernelCapabilityFlag { EntryNumber = 15u };
+        private readonly KcFlagModel capability = new KcFlagModel { EntryNumber = 15u };
 
 
         public uint CalcFlag()

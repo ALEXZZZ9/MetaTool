@@ -89,15 +89,15 @@ namespace AX9.MetaTool.Models
             return RSAKeyValue.Modulus != null;
         }
 
-        public static DescModel FromNpdm(Npdm npdm)
+        public static DescModel FromNpdm(NpdmModel npdm)
         {
             DescModel desc = new DescModel
             {
-                ProgramIdMin = $"0x{$"{npdm.ACIDData.Header.ProgramIdMin:X}".PadLeft(16, '0')}",
-                ProgramIdMax = $"0x{$"{npdm.ACIDData.Header.ProgramIdMax:X}".PadLeft(16, '0')}",
-                FsAccessControlDescriptor = npdm.ACIData.FaDescriptor,
-                SrvAccessControlDescriptor = npdm.ACIData.SaDescriptor,
-                KernelCapabilityDescriptor = npdm.ACIData.KcDescriptor,
+                ProgramIdMin = $"0x{$"{npdm.AcidModel.Header.ProgramIdMin:X}".PadLeft(16, '0')}",
+                ProgramIdMax = $"0x{$"{npdm.AcidModel.Header.ProgramIdMax:X}".PadLeft(16, '0')}",
+                FsAccessControlDescriptor = npdm.AciModel.FaDescriptor,
+                SrvAccessControlDescriptor = npdm.AciModel.SaDescriptor,
+                KernelCapabilityDescriptor = npdm.AciModel.KcDescriptor,
                 Default = new DefaultModel
                 {
                     Is64BitInstructionValue = (npdm.Header.Flags & 1) == 1,
@@ -105,12 +105,12 @@ namespace AX9.MetaTool.Models
                     MainThreadPriorityValue = npdm.Header.MainThreadPriority,
                     MainThreadCoreNumberValue = npdm.Header.MainThreadCoreNumber,
                     MainThreadStackSizeValue = npdm.Header.MainThreadStackSize,
-                    FsAccessControlData = new FaDataModel(npdm.ACIData.FaDescriptor),
-                    SrvAccessControlData = new SaDataModel(npdm.ACIData.SaDescriptor),
-                    KernelCapabilityData = new KcDataModel(npdm.ACIData.KcDescriptor)
+                    FsAccessControlData = new FaDataModel(npdm.AciModel.FaDescriptor),
+                    SrvAccessControlData = new SaDataModel(npdm.AciModel.SaDescriptor),
+                    KernelCapabilityData = new KcDataModel(npdm.AciModel.KcDescriptor)
                 },
                 RSAKeyValue = new RSAParameters(),
-                Acid = Convert.ToBase64String(npdm.ACIDData.ACID)
+                Acid = Convert.ToBase64String(npdm.AcidModel.ACID)
             };
 
             return desc;

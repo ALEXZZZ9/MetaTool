@@ -67,7 +67,7 @@ namespace AX9.MetaTool.Models
         private byte minorVersionVlaue;
         private string minorVersion;
 
-        private readonly KernelCapabilityFlag capability = new KernelCapabilityFlag { EntryNumber = 14u };
+        private readonly KcFlagModel capability = new KcFlagModel { EntryNumber = 14u };
 
 
         public uint CalcFlag()
