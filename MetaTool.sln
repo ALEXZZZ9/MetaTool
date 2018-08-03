@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaToolGUI", "MetaToolGUI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaTool", "MetaTool\MetaTool.csproj", "{5AE80688-98EE-4F79-BA0A-569B9E04472E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaToolTest", "MetaToolTest\MetaToolTest.csproj", "{426CF16C-DA86-43C7-8242-E4C55A2DA541}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		MetaToolShared\MetaToolShared.projitems*{57a411d9-7063-40f1-8838-79c9632c15a6}*SharedItemsImports = 13
@@ -28,6 +30,10 @@ Global
 		{5AE80688-98EE-4F79-BA0A-569B9E04472E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AE80688-98EE-4F79-BA0A-569B9E04472E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AE80688-98EE-4F79-BA0A-569B9E04472E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{426CF16C-DA86-43C7-8242-E4C55A2DA541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426CF16C-DA86-43C7-8242-E4C55A2DA541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426CF16C-DA86-43C7-8242-E4C55A2DA541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426CF16C-DA86-43C7-8242-E4C55A2DA541}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
