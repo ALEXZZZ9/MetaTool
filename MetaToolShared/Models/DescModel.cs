@@ -11,11 +11,16 @@ namespace AX9.MetaTool.Models
     [XmlRoot("Desc")]
     public class DescModel
     {
-        public DescModel()
+        public DescModel() { }
+        public DescModel(bool initDefault)
         {
-            MemoryRegion = 0;
-            ProgramIdMin = "0x0100000000010000";
-            ProgramIdMax = "0x01FFFFFFFFFFFFFF";
+            if (initDefault)
+            {
+                MemoryRegion = 0;
+                ProgramIdMin = "0x0100000000010000";
+                ProgramIdMax = "0x01FFFFFFFFFFFFFF";
+                Default = new DefaultModel(true);
+            }
         }
 
 

@@ -223,10 +223,8 @@ namespace AX9.MetaToolGUI
                 if (!saEntry.IsNewRow && !string.IsNullOrEmpty((string)saEntry.Cells[0].Value)) desc.SrvAccessControlDescriptor.Entries.Add(new SaEntry { IsServerValue = (bool)saEntry.Cells[1].Value, Name = (string)saEntry.Cells[0].Value });
             }
 
-            //desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue = (byte)DENUD_HighestPriority.Value;
-            //desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue = (byte)DENUD_LowestPriority.Value;
-            desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue = (byte)DENUD_HighestPriority.Value;
-            desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue = (byte)DENUD_LowestPriority.Value;
+            desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue = (byte)DENUD_HighestPriority.Value;
+            desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue = (byte)DENUD_LowestPriority.Value;
             desc.KernelCapabilityDescriptor.ThreadInfo.MaxCoreNumberValue = (byte)DENUD_MaxCoreNumber.Value;
             desc.KernelCapabilityDescriptor.ThreadInfo.MinCoreNumberValue = (byte)DENUD_MinCoreNumber.Value;
 

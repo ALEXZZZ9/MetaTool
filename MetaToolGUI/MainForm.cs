@@ -78,7 +78,7 @@ namespace AX9.MetaToolGUI
 
         private void MB_CreateDesc_Click(object sender, EventArgs e)
         {
-            DescModel desc = new DescModel();
+            DescModel desc = new DescModel(true);
 
             new DescEditor(desc).Show();
             this.Hide();

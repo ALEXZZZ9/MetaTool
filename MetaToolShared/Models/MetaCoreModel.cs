@@ -9,12 +9,16 @@ namespace AX9.MetaTool.Models
     [XmlRoot("Core")]
     public class CoreModel
     {
-        public CoreModel()
+        public CoreModel() { }
+        public CoreModel(bool initDefault)
         {
-            MainThreadPriorityValue = 44;
-            MainThreadCoreNumberValue = 0;
-            MainThreadStackSizeValue = 0x100000;
-            ProcessAddressSpaceValue = ProcessAddressSpacesEnum.AddressSpace64Bit;
+            if (initDefault)
+            {
+                MainThreadPriorityValue = 44;
+                MainThreadCoreNumberValue = 0;
+                MainThreadStackSizeValue = 0x100000;
+                ProcessAddressSpaceValue = ProcessAddressSpacesEnum.AddressSpace64Bit;
+            }
         }
 
 
@@ -84,7 +88,7 @@ namespace AX9.MetaTool.Models
             set
             {
                 processAddressSpace = value.ToString();
-                Is64BitInstructionValue = (value == (ProcessAddressSpacesEnum.AddressSpace64Bit | ProcessAddressSpacesEnum.AddressSpace64BitOld));
+                Is64BitInstructionValue = (processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64Bit || processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64BitOld);
                 processAddressSpaceValue = value;
             }
         }
@@ -98,7 +102,7 @@ namespace AX9.MetaTool.Models
                 if (!Enum.GetNames(typeof(ProcessAddressSpacesEnum)).Contains(value)) throw new ArgumentException($"Specified an invalid string, {value}, in ProcessAddressSpace");
 
                 processAddressSpaceValue = (ProcessAddressSpacesEnum)Enum.Parse(typeof(ProcessAddressSpacesEnum), value);
-                Is64BitInstructionValue = (processAddressSpaceValue == (ProcessAddressSpacesEnum.AddressSpace64Bit | ProcessAddressSpacesEnum.AddressSpace64BitOld));
+                Is64BitInstructionValue = (processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64Bit || processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64BitOld);
                 processAddressSpace = value;
             }
         }
