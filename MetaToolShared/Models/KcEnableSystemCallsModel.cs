@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("EnableSystemCalls")]
-    public class KcEnableSystemCallsModel
+    public class KcEnableSystemCallsModel : ICloneable
     {
         public KcEnableSystemCallsModel() { }
         public KcEnableSystemCallsModel(string name, byte systemCallId)
@@ -90,6 +90,17 @@ namespace AX9.MetaTool.Models
             if (SystemCallId == null) throw new ArgumentException("Not Found EnableSystemCalls/SystemCallId");
 
             return true;
+        }
+
+        public object Clone()
+        {
+            return new KcEnableSystemCallsModel
+            {
+                Name = Name,
+                SystemCallId = SystemCallId,
+                Index = Index,
+                SystemCallIdValue = SystemCallIdValue
+            };
         }
     }
 }

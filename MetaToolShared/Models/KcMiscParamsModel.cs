@@ -1,10 +1,11 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using AX9.MetaTool.Enums;
 
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("MiscParams")]
-    public class KcMiscParamsModel
+    public class KcMiscParamsModel : ICloneable
     {
         public KcMiscParamsModel()
         {
@@ -52,6 +53,14 @@ namespace AX9.MetaTool.Models
         public bool CheckSuccessToRead()
         {
             return ProgramType != null;
+        }
+
+        public object Clone()
+        {
+            return new KcMiscParamsModel
+            {
+                ProgramType = ProgramType
+            };
         }
     }
 }

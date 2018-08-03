@@ -7,7 +7,7 @@ using System.Linq;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("Core")]
-    public class CoreModel
+    public class CoreModel : ICloneable
     {
         public CoreModel() { }
         public CoreModel(bool initDefault)
@@ -40,8 +40,8 @@ namespace AX9.MetaTool.Models
             set
             {
                 if (programId != null ) throw new ArgumentException("Either Core/ProgramId or Core/ApplicationId is declared more than once.");
-                
-                programIdValue = Utils.ConvertHexString(value, "Core/ProgramId");
+
+                if (!string.IsNullOrEmpty(value)) programIdValue = Utils.ConvertHexString(value, "Core/ProgramId");
                 programId = value;
             }
         }
@@ -54,7 +54,7 @@ namespace AX9.MetaTool.Models
             {
                 if (programId != null) throw new ArgumentException("Either Core/ProgramId or Core/ApplicationId is declared more than once.");
 
-                programIdValue = Utils.ConvertHexString(value, "Core/ApplicationId");
+                if (!string.IsNullOrEmpty(value)) programIdValue = Utils.ConvertHexString(value, "Core/ApplicationId");
                 programId = value;
             }
         }
@@ -76,7 +76,7 @@ namespace AX9.MetaTool.Models
             get => is64BitInstruction;
             set
             {
-                is64BitInstructionValue = Utils.ConvertBoolString(value, "Core/Is64BitInstruction");
+                if (!string.IsNullOrEmpty(value)) is64BitInstructionValue = Utils.ConvertBoolString(value, "Core/Is64BitInstruction");
                 is64BitInstruction = value;
             }
         }
@@ -99,10 +99,14 @@ namespace AX9.MetaTool.Models
             get => processAddressSpace;
             set
             {
-                if (!Enum.GetNames(typeof(ProcessAddressSpacesEnum)).Contains(value)) throw new ArgumentException($"Specified an invalid string, {value}, in ProcessAddressSpace");
+                if (!string.IsNullOrEmpty(value))
+                {
+                    if (!Enum.GetNames(typeof(ProcessAddressSpacesEnum)).Contains(value)) throw new ArgumentException($"Specified an invalid string, {value}, in ProcessAddressSpace");
 
-                processAddressSpaceValue = (ProcessAddressSpacesEnum)Enum.Parse(typeof(ProcessAddressSpacesEnum), value);
-                Is64BitInstructionValue = (processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64Bit || processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64BitOld);
+                    processAddressSpaceValue = (ProcessAddressSpacesEnum)Enum.Parse(typeof(ProcessAddressSpacesEnum), value);
+                    Is64BitInstructionValue = (processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64Bit || processAddressSpaceValue == ProcessAddressSpacesEnum.AddressSpace64BitOld);
+                }
+
                 processAddressSpace = value;
             }
         }
@@ -124,10 +128,12 @@ namespace AX9.MetaTool.Models
             get => mainThreadPriority;
             set
             {
-                mainThreadPriorityValue = (value != null) ? checked((byte)Utils.ConvertDecimalString(value, "Core/MainThreadPriority")) : (byte)0;
+                if (!string.IsNullOrEmpty(value))
+                { 
+                    mainThreadPriorityValue = checked((byte)Utils.ConvertDecimalString(value, "Core/MainThreadPriority"));
 
-                if (MainThreadPriorityValue > 63) throw new ArgumentException("Out of range in Core/MainThreadPriority");
-
+                    if (MainThreadPriorityValue > 63) throw new ArgumentException("Out of range in Core/MainThreadPriority");
+                }
                 mainThreadPriority = value;
             }
         }
@@ -149,7 +155,7 @@ namespace AX9.MetaTool.Models
             get => mainThreadCoreNumber;
             set
             {
-                mainThreadCoreNumberValue = (value != null) ? checked((byte)Utils.ConvertDecimalString(value, "Core/MainThreadCoreNumber")) : (byte)0;
+                if (!string.IsNullOrEmpty(value)) mainThreadCoreNumberValue = checked((byte)Utils.ConvertDecimalString(value, "Core/MainThreadCoreNumber"));
                 mainThreadCoreNumber = value;
             }
         }
@@ -171,12 +177,12 @@ namespace AX9.MetaTool.Models
             get => mainThreadStackSize;
             set
             {
-                if (value == null) return;
+                if (!string.IsNullOrEmpty(value))
+                { 
+                    mainThreadStackSizeValue = checked((uint)Utils.ConvertHexString(value, "Core/MainThreadStackSize"));
 
-                mainThreadStackSizeValue = checked((uint)Utils.ConvertHexString(value, "Core/MainThreadStackSize"));
-
-                if ((MainThreadStackSizeValue & 4095u) > 0u || MainThreadStackSizeValue == 0u) throw new ArgumentException("Core/MainThreadStackSize is invalid");
-
+                    if ((MainThreadStackSizeValue & 4095u) > 0u || MainThreadStackSizeValue == 0u) throw new ArgumentException("Core/MainThreadStackSize is invalid");
+                }
                 mainThreadStackSize = value;
             }
         }
@@ -198,7 +204,7 @@ namespace AX9.MetaTool.Models
             get => version;
             set
             {
-                versionValue = checked((uint)Utils.ConvertDecimalString(value, "Core/Version"));
+                if (!string.IsNullOrEmpty(value)) versionValue = checked((uint)Utils.ConvertDecimalString(value, "Core/Version"));
                 version = value;
             }
         }
@@ -222,11 +228,15 @@ namespace AX9.MetaTool.Models
             get => name;
             set
             {
-                byte[] valueBytes = Encoding.UTF8.GetBytes(value);
+                if (!string.IsNullOrEmpty(value))
+                { 
+                    byte[] valueBytes = Encoding.UTF8.GetBytes(value);
 
-                if (valueBytes.Length > 15) throw new ArgumentException("Specified 15 or more characters in Core/Name.");
+                    if (valueBytes.Length > 15) throw new ArgumentException("Specified 15 or more characters in Core/Name.");
 
-                nameValue = valueBytes;
+                    nameValue = valueBytes;
+                }
+
                 name = value;
             }
         }
@@ -250,11 +260,15 @@ namespace AX9.MetaTool.Models
             get => productCode;
             set
             {
-                byte[] valueBytes = Encoding.UTF8.GetBytes(value);
+                if (!string.IsNullOrEmpty(value))
+                { 
+                    byte[] valueBytes = Encoding.UTF8.GetBytes(value);
 
-                if (valueBytes.Length > 15) throw new ArgumentException("Specified 15 or more characters in Core/ProductCode.");
+                    if (valueBytes.Length > 15) throw new ArgumentException("Specified 15 or more characters in Core/ProductCode.");
 
-                productCodeValue = valueBytes;
+                    productCodeValue = valueBytes;
+                }
+
                 productCode = value;
             }
         }
@@ -276,12 +290,15 @@ namespace AX9.MetaTool.Models
             get => systemResourceSize;
             set
             {
-                uint size = checked((uint)Utils.ConvertHexString(value, "Core/SystemResourceSize"));
+                if (!string.IsNullOrEmpty(value))
+                {
+                    uint size = checked((uint) Utils.ConvertHexString(value, "Core/SystemResourceSize"));
 
-                if ((size & 2047u) > 0u) throw new ArgumentException("Core/SystemResourceSize is invalid");
-                if (size > 534773760u) throw new ArgumentException("Out of range in Core/SystemResourceSize");
+                    if ((size & 2047u) > 0u) throw new ArgumentException("Core/SystemResourceSize is invalid");
+                    if (size > 534773760u) throw new ArgumentException("Out of range in Core/SystemResourceSize");
 
-                systemResourceSizeValue = size;
+                    systemResourceSizeValue = size;
+                }
                 systemResourceSize = value;
             }
         }
@@ -316,5 +333,26 @@ namespace AX9.MetaTool.Models
         private string productCode;
         private uint systemResourceSizeValue;
         private string systemResourceSize;
+
+
+        public object Clone()
+        {
+            return new CoreModel
+            {
+                ProgramId = ProgramId,
+                Is64BitInstruction = Is64BitInstruction,
+                ProcessAddressSpace = ProcessAddressSpace,
+                MainThreadPriority = MainThreadPriority,
+                MainThreadCoreNumber = MainThreadCoreNumber,
+                MainThreadStackSize = MainThreadStackSize,
+                Version = Version,
+                Name = Name,
+                ProductCode = ProductCode,
+                SystemResourceSize = SystemResourceSize,
+                FsAccessControlData = (FaDataModel)FsAccessControlData?.Clone(),
+                SrvAccessControlData = (SaDataModel)SrvAccessControlData?.Clone(),
+                KernelCapabilityData = (KcDataModel)KernelCapabilityData?.Clone()
+            };
+        }
     }
 }

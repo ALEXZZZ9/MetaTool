@@ -6,7 +6,7 @@ using AX9.MetaTool.Enums;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("MemoryMap")]
-    public class KcMemoryMapModel
+    public class KcMemoryMapModel : ICloneable
     {
         [XmlIgnore]
         public ulong BeginAddressValue
@@ -149,6 +149,17 @@ namespace AX9.MetaTool.Models
             if (Type == null) throw new ArgumentException("Not Found MemoryMap/Type");
         
             return true;
+        }
+
+        public object Clone()
+        {
+            return new KcMemoryMapModel
+            {
+                BeginAddress = BeginAddress,
+                Size = Size,
+                Permission = Permission,
+                Type = Type,
+            };
         }
     }
 }

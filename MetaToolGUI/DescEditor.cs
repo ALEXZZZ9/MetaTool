@@ -57,18 +57,17 @@ namespace AX9.MetaToolGUI
             {
                 case (int)AcidTypeEnum.DoNotChange:
                     DETB_Acid.ReadOnly = true;
+                    DEB_UpdateAcid.Visible = false;
                     DETB_Acid.Text = desc.Acid;
                     break;
                 case (int)AcidTypeEnum.Generate:
-                    MessageBox.Show("Not yet implemented!");
-                    DECB_AcidType.SelectedIndex = 0;
-                    return;
                     DETB_Acid.ReadOnly = true;
-                    // TODO: Generate acid
-                    //DETB_Acid.Text = desc.GenerateAcid();
+                    DEB_UpdateAcid.Visible = true;
+                    GenerateAcid();
                     break;
                 case (int)AcidTypeEnum.Custom:
                     DETB_Acid.ReadOnly = false;
+                    DEB_UpdateAcid.Visible = false;
                     break;
             }
         }
@@ -108,11 +107,16 @@ namespace AX9.MetaToolGUI
             SaveAs();
         }
 
+        private void DEB_UpdateAcid_Click(object sender, EventArgs e)
+        {
+            GenerateAcid();
+        }
 
         private void Save(string filePath)
         {
             try
             {
+                if (DECB_AcidType.SelectedIndex == (int)AcidTypeEnum.Generate) GenerateAcid();
                 UIToDesc();
 
                 File.WriteAllText(filePath, desc.XMLSerialize());
@@ -259,6 +263,13 @@ namespace AX9.MetaToolGUI
             desc.Default.FsAccessControlData = new FaDataModel(desc.FsAccessControlDescriptor);
             desc.Default.SrvAccessControlData = new SaDataModel(desc.SrvAccessControlDescriptor);
             desc.Default.KernelCapabilityData = new KcDataModel(desc.KernelCapabilityDescriptor);
+        }
+
+        private void GenerateAcid()
+        {
+            UIToDesc();
+            DETB_Acid.Text = Convert.ToBase64String(NpdmGenerator.GetAcidBytes(desc));
+
         }
     }
 }

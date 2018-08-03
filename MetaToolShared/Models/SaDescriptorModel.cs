@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("SrvAccessControlDescriptor")]
-    public class SaDescriptorModel
+    public class SaDescriptorModel : ICloneable
     {
         public SaDescriptorModel() { }
         public SaDescriptorModel(SaDataModel data)
@@ -81,7 +81,7 @@ namespace AX9.MetaTool.Models
 
         public bool HasWildCard(string name) => name[name.Length - 1] == '*';
 
-        public void CheckCapabilities(DefaultModel @default)
+        public void CheckCapabilities(SaDataModel data)
         {
             if (Entries == null || Entries.Count == 0) return;
 
@@ -89,7 +89,7 @@ namespace AX9.MetaTool.Models
             {
                 bool flag = false;
 
-                foreach (SaEntry dEntries in @default.SrvAccessControlData.Entries)
+                foreach (SaEntry dEntries in data.Entries)
                 {
                     if (entries.IsServer == dEntries.IsServer)
                     {
@@ -111,6 +111,14 @@ namespace AX9.MetaTool.Models
 
                 if (!flag) throw new ArgumentException($"{entries.Name} is not allowed, based on SrvAccessControlDescriptor.");
             }
+        }
+
+        public object Clone()
+        {
+            return new SaDescriptorModel
+            {
+                Entries = (List<SaEntry>)Entries?.Clone(),
+            };
         }
     }
 }

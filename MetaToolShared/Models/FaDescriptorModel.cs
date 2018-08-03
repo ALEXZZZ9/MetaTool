@@ -7,7 +7,7 @@ using AX9.MetaTool.Enums;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("FsAccessControlDescriptor")]
-    public class FaDescriptorModel
+    public class FaDescriptorModel : ICloneable
     {
         public FaDescriptorModel()
         {
@@ -143,7 +143,7 @@ namespace AX9.MetaTool.Models
         private string saveDataOwnerIdMin;
         private ulong saveDataOwnerIdMaxValue;
         private string saveDataOwnerIdMax;
-        private int dataSize => 28 + contentOwnerInfoSize + saveDataOwnerInfoSize;
+        private int dataSize => 0x1C + contentOwnerInfoSize + saveDataOwnerInfoSize;
         private int contentOwnerInfoSize => ((ContentOwnerIds.Count != 0) ? (4 + ContentOwnerIds.Count * 8) : 0);
         private int saveDataOwnerInfoSize => ((SaveDataOwnerIds.Count != 0) ? (4 + Utils.RoundUp(SaveDataOwnerIds.Count, 4u) + SaveDataOwnerIds.Count * 8) : 0);
 
@@ -231,15 +231,16 @@ namespace AX9.MetaTool.Models
             }
         }
 
-        public byte[] ExportBinary()
+        public byte[] ExportBinary(bool isAsid = false)
         {
-            byte[] array = new byte[dataSize];
+            byte[] array = new byte[dataSize + (isAsid ? 0x10 : 0x0)];
 
             Buffer.BlockCopy(BitConverter.GetBytes(Version), 0, array, 0, 1);
 
             UpdateFlagPresetsBit();
             Buffer.BlockCopy(BitConverter.GetBytes(FlagPresetsBit), 0, array, 4, 8);
 
+            if (isAsid) return array;
             int num = 28;
             Buffer.BlockCopy(BitConverter.GetBytes(num), 0, array, 12, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(contentOwnerInfoSize), 0, array, 16, 4);
@@ -277,6 +278,22 @@ namespace AX9.MetaTool.Models
             }
 
             return array;
+        }
+
+        public object Clone()
+        {
+            return new FaDescriptorModel
+            {
+                Version = Version,
+                FlagPresetsBit = FlagPresetsBit,
+                FlagPresets = (List<string>)FlagPresets?.Clone(),
+                ContentOwnerIdMin = ContentOwnerIdMin,
+                ContentOwnerIdMax = ContentOwnerIdMax,
+                SaveDataOwnerIdMin = SaveDataOwnerIdMin,
+                SaveDataOwnerIdMax = SaveDataOwnerIdMax,
+                ContentOwnerIds = (List<string>)ContentOwnerIds?.Clone(),
+                SaveDataOwnerIds = (List<SaveDataOwnerId>)SaveDataOwnerIds?.Clone(),
+            };
         }
     }
 }

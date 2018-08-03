@@ -3,61 +3,108 @@ using System.IO;
 using AX9.MetaTool.Models;
 using AX9.MetaTool.Structs;
 using System.Runtime.InteropServices;
-using System.Text;
 using AX9.MetaTool.Enums;
 
 namespace AX9.MetaTool
 {
     public class NpdmGenerator
     {
-        public static void CreateNpdm(DescModel desc, MetaModel meta, string saveFilePach)
+        public static void CreateNpdm(DescModel desc, MetaModel meta, bool forceGenerateAcid, string saveFilePach)
         {
-            byte[] bytes = GetNpdmBytes(desc, meta);
+            byte[] bytes = GetNpdmBytes(desc, meta, forceGenerateAcid);
 
             File.WriteAllBytes(saveFilePach, bytes);
         }
 
-        public static byte[] GetNpdmBytes(DescModel desc, MetaModel meta)
+        public static byte[] GetNpdmBytes(DescModel desc, MetaModel meta, bool forceGenerateAcid = false)
         {
             if (desc == null) throw new ApplicationException("File .desc was not specified.");
             if (meta?.Core == null) throw new ApplicationException("File .nmeta was not specified.");
             if (meta.Core.ProgramIdValue == 0) throw new ApplicationException("Core/ProgramId was not specified within the file .nmeta.");
 
-            meta = MergeMeta(desc, meta);
-            meta.Header.Fill(meta);
+            MetaModel mMeta = MergeMeta(desc, meta);
+            mMeta.Header.Fill(mMeta);
 
-            if (meta.Core.SystemResourceSizeValue != 0 &&
+            if (mMeta.Core.SystemResourceSizeValue != 0 &&
                 (desc.KernelCapabilityDescriptor.MiscParams == null ||
                 desc.KernelCapabilityDescriptor.MiscParams.ProgramTypeValue != ProgramTypeEnum.Application ||
-                meta.Core.ProcessAddressSpaceValue != ProcessAddressSpacesEnum.AddressSpace64Bit))
+                mMeta.Core.ProcessAddressSpaceValue != ProcessAddressSpacesEnum.AddressSpace64Bit))
             {
                 throw new ApplicationException("Core/SystemResourceSize can only be specified for 64 - bit applications.");
             }
 
-            desc.AciHeader.ProgramId = meta.Core.ProgramIdValue;
+            desc.AciHeader.ProgramId = mMeta.Core.ProgramIdValue;
 
-            byte[] aciBytes = GetAciBytes(desc, meta);
-            byte[] acidBytes = Convert.FromBase64String(desc.Acid);
+            byte[] aciBytes = GetAciBytes(desc, mMeta);
+            byte[] acidBytes = (string.IsNullOrEmpty(desc.Acid) || forceGenerateAcid) ? GetAcidBytes(desc, mMeta) : Convert.FromBase64String(desc.Acid);
 
-            meta.Header.AciSize = (uint)aciBytes.Length;
-            meta.Header.AcidSize = (uint)acidBytes.Length;
+            mMeta.Header.AciSize = (uint)aciBytes.Length;
+            mMeta.Header.AcidSize = (uint)acidBytes.Length;
 
             uint headerSize = (uint)Marshal.SizeOf(typeof(NpdmHeader));
 
             uint align = 16;
-            meta.Header.AcidOffset = headerSize;
-            meta.Header.AciOffset = meta.Header.AcidOffset + Utils.RoundUp(meta.Header.AcidSize, align);
+            mMeta.Header.AcidOffset = headerSize;
+            mMeta.Header.AciOffset = mMeta.Header.AcidOffset + Utils.RoundUp(mMeta.Header.AcidSize, align);
 
-            uint acidSize = Utils.RoundUp(meta.Header.AcidSize, align);
-            byte[] npdmBytes = new byte[headerSize + acidSize + meta.Header.AciSize];
+            uint acidSize = Utils.RoundUp(mMeta.Header.AcidSize, align);
+            byte[] npdmBytes = new byte[headerSize + acidSize + mMeta.Header.AciSize];
 
-            byte[] headerBytes = Utils.ToBytes(meta.Header, headerSize);
+            byte[] headerBytes = Utils.ToBytes(mMeta.Header, headerSize);
             Array.Copy(headerBytes, 0, npdmBytes, 0, headerSize);
 
-            Array.Copy(acidBytes, 0, npdmBytes, meta.Header.AcidOffset, meta.Header.AcidSize);
-            Array.Copy(aciBytes, 0, npdmBytes, meta.Header.AciOffset, meta.Header.AciSize);
+            Array.Copy(acidBytes, 0, npdmBytes, mMeta.Header.AcidOffset, mMeta.Header.AcidSize);
+            Array.Copy(aciBytes, 0, npdmBytes, mMeta.Header.AciOffset, mMeta.Header.AciSize);
 
             return npdmBytes;
+        }
+
+        public static byte[] GetAcidBytes(DescModel desc, MetaModel meta = null)
+        {
+            AcidHeader header = desc.AcidHeader;
+            DescModel mDesc = (meta != null) ? MergeDesc(desc, meta) : desc;
+
+            header.Fill(desc);
+
+            if (header.ProgramIdMin == 0 || header.ProgramIdMax == 0) throw new ArgumentException("ProgramIdMin/ProgramIdMax is incorrect");
+
+            mDesc.KernelCapabilityDescriptor.CheckCapabilities(mDesc.Default.KernelCapabilityData);
+            mDesc.SrvAccessControlDescriptor.CheckCapabilities(mDesc.Default.SrvAccessControlData);
+
+            uint headerSize = (uint)Marshal.SizeOf(typeof(AcidHeader));
+            byte[] faBinary = mDesc.FsAccessControlDescriptor?.ExportBinary(true);
+            byte[] saBinary = mDesc.SrvAccessControlDescriptor?.ExportBinary();
+            byte[] kcBinary = mDesc.KernelCapabilityDescriptor?.ExportBinary();
+
+            header.FacOffset = headerSize;
+            header.FacSize = (uint)(faBinary?.Length ?? 0);
+            header.SacOffset = header.FacOffset + Utils.RoundUp(header.FacSize, 16);
+            header.SacSize = (uint)(saBinary?.Length ?? 0);
+            header.KcOffset = header.SacOffset + Utils.RoundUp(header.SacSize, 16);
+            header.KcSize = (uint)(kcBinary?.Length ?? 0);
+
+            uint facSize = Utils.RoundUp(header.FacSize, 16);
+            uint sacSize = Utils.RoundUp(header.SacSize, 16);
+            uint kacSize = Utils.RoundUp(header.KcSize, 16);
+            byte[] aciBytes = new byte[headerSize + facSize + sacSize + kacSize];
+
+            byte[] headerBytes = Utils.ToBytes(header, headerSize);
+            Array.Copy(headerBytes, 0, aciBytes, 0, headerSize);
+
+            if (faBinary != null && header.FacSize > 0)
+            {
+                Array.Copy(faBinary, 0, aciBytes, header.FacOffset, header.FacSize);
+            }
+            if (saBinary != null && header.SacSize > 0)
+            {
+                Array.Copy(saBinary, 0, aciBytes, header.SacOffset, header.SacSize);
+            }
+            if (kcBinary != null && header.KcSize > 0)
+            {
+                Array.Copy(kcBinary, 0, aciBytes, header.KcOffset, header.KcSize);
+            }
+
+            return aciBytes;
         }
 
         public static byte[] GetAciBytes(DescModel desc, MetaModel meta)
@@ -66,47 +113,47 @@ namespace AX9.MetaTool
 
             if (desc.AciHeader.ProgramId == 0) throw new ArgumentException("Not Found ProgramId");
 
-            desc = MergeDesc(desc, meta);
+            DescModel mDesc = MergeDesc(desc, meta);
 
-            desc.KernelCapabilityDescriptor.CheckCapabilities(desc.Default);
-            desc.SrvAccessControlDescriptor.CheckCapabilities(desc.Default);
+            mDesc.KernelCapabilityDescriptor.CheckCapabilities(mDesc.Default.KernelCapabilityData);
+            mDesc.SrvAccessControlDescriptor.CheckCapabilities(mDesc.Default.SrvAccessControlData);
 
             uint headerSize = (uint)Marshal.SizeOf(typeof(AciHeader));
-            byte[] faBinary = desc.FsAccessControlDescriptor?.ExportBinary();
-            byte[] saBinary = desc.SrvAccessControlDescriptor?.ExportBinary();
-            byte[] kcBinary = desc.KernelCapabilityDescriptor?.ExportBinary();
+            byte[] faBinary = mDesc.FsAccessControlDescriptor?.ExportBinary();
+            byte[] saBinary = mDesc.SrvAccessControlDescriptor?.ExportBinary();
+            byte[] kcBinary = mDesc.KernelCapabilityDescriptor?.ExportBinary();
 
-            desc.AciHeader.FacOffset = headerSize;
-            desc.AciHeader.FacSize = (uint)(faBinary?.Length ?? 0);
-            desc.AciHeader.SacOffset = desc.AciHeader.FacOffset + Utils.RoundUp(desc.AciHeader.FacSize, 16);
-            desc.AciHeader.SacSize = (uint)(saBinary?.Length ?? 0);
-            desc.AciHeader.KcOffset = desc.AciHeader.SacOffset + Utils.RoundUp(desc.AciHeader.SacSize, 16);
-            desc.AciHeader.KcSize = (uint)(kcBinary?.Length ?? 0);
+            mDesc.AciHeader.FacOffset = headerSize;
+            mDesc.AciHeader.FacSize = (uint)(faBinary?.Length ?? 0);
+            mDesc.AciHeader.SacOffset = mDesc.AciHeader.FacOffset + Utils.RoundUp(mDesc.AciHeader.FacSize, 16);
+            mDesc.AciHeader.SacSize = (uint)(saBinary?.Length ?? 0);
+            mDesc.AciHeader.KcOffset = mDesc.AciHeader.SacOffset + Utils.RoundUp(mDesc.AciHeader.SacSize, 16);
+            mDesc.AciHeader.KcSize = (uint)(kcBinary?.Length ?? 0);
 
-            uint facSize = (desc.AciHeader.SacSize > 0 || desc.AciHeader.KcSize > 0) ? Utils.RoundUp(desc.AciHeader.FacSize, 16) : desc.AciHeader.FacSize;
-            uint sacSize = (desc.AciHeader.KcSize > 0) ? Utils.RoundUp(desc.AciHeader.SacSize, 16) : desc.AciHeader.SacSize;
-            byte[] aciBytes = new byte[headerSize + facSize + sacSize + desc.AciHeader.KcSize];
+            uint facSize = (mDesc.AciHeader.SacSize > 0 || mDesc.AciHeader.KcSize > 0) ? Utils.RoundUp(mDesc.AciHeader.FacSize, 16) : mDesc.AciHeader.FacSize;
+            uint sacSize = (mDesc.AciHeader.KcSize > 0) ? Utils.RoundUp(mDesc.AciHeader.SacSize, 16) : mDesc.AciHeader.SacSize;
+            byte[] aciBytes = new byte[headerSize + facSize + sacSize + mDesc.AciHeader.KcSize];
 
-            byte[] headerBytes = Utils.ToBytes(desc.AciHeader, headerSize);
+            byte[] headerBytes = Utils.ToBytes(mDesc.AciHeader, headerSize);
             Array.Copy(headerBytes, 0, aciBytes, 0, headerSize);
 
-            if (faBinary != null && desc.AciHeader.FacSize > 0)
+            if (faBinary != null && mDesc.AciHeader.FacSize > 0)
             {
-                Array.Copy(faBinary, 0, aciBytes, desc.AciHeader.FacOffset, desc.AciHeader.FacSize);
+                Array.Copy(faBinary, 0, aciBytes, mDesc.AciHeader.FacOffset, mDesc.AciHeader.FacSize);
             }
-            if (saBinary != null && desc.AciHeader.SacSize > 0)
+            if (saBinary != null && mDesc.AciHeader.SacSize > 0)
             {
-                Array.Copy(saBinary, 0, aciBytes, desc.AciHeader.SacOffset, desc.AciHeader.SacSize);
+                Array.Copy(saBinary, 0, aciBytes, mDesc.AciHeader.SacOffset, mDesc.AciHeader.SacSize);
             }
-            if (kcBinary != null && desc.AciHeader.KcSize > 0)
+            if (kcBinary != null && mDesc.AciHeader.KcSize > 0)
             {
-                Array.Copy(kcBinary, 0, aciBytes, desc.AciHeader.KcOffset, desc.AciHeader.KcSize);
+                Array.Copy(kcBinary, 0, aciBytes, mDesc.AciHeader.KcOffset, mDesc.AciHeader.KcSize);
             }
 
             return aciBytes;
         }
 
-        public static MetaModel MergeMeta(DescModel desc, MetaModel meta)
+        public static MetaModel MergeMeta(DescModel desc, MetaModel meta, bool replace = false)
         {
             if (desc == null) throw new ApplicationException("File .desc was not specified.");
             if (meta == null) throw new ApplicationException("File .nmeta was not specified.");
@@ -114,63 +161,67 @@ namespace AX9.MetaTool
 
             desc.Default.CheckReadSuccess();
 
-            if (string.IsNullOrEmpty(meta.Core.Is64BitInstruction)) meta.Core.Is64BitInstruction = desc.Default.Is64BitInstruction;
-            if (string.IsNullOrEmpty(meta.Core.ProcessAddressSpace)) meta.Core.ProcessAddressSpace = desc.Default.ProcessAddressSpace;
-            if (string.IsNullOrEmpty(meta.Core.MainThreadPriority)) meta.Core.MainThreadPriority = desc.Default.MainThreadPriority;
-            if (string.IsNullOrEmpty(meta.Core.MainThreadCoreNumber)) meta.Core.MainThreadCoreNumber = desc.Default.MainThreadCoreNumber;
-            if (string.IsNullOrEmpty(meta.Core.MainThreadStackSize)) meta.Core.MainThreadStackSize = desc.Default.MainThreadStackSize;
-            if (string.IsNullOrEmpty(meta.Core.SystemResourceSize)) meta.Core.SystemResourceSize = "0x0";
-            if (string.IsNullOrEmpty(meta.Core.Version)) meta.Core.Version = "0";
-            if (string.IsNullOrEmpty(meta.Core.Name)) meta.Core.Name = "Application";
+            MetaModel mMeta = replace ? meta : (MetaModel)meta.Clone();
+
+            if (string.IsNullOrEmpty(mMeta.Core.Is64BitInstruction)) mMeta.Core.Is64BitInstruction = desc.Default.Is64BitInstruction;
+            if (string.IsNullOrEmpty(mMeta.Core.ProcessAddressSpace)) mMeta.Core.ProcessAddressSpace = desc.Default.ProcessAddressSpace;
+            if (string.IsNullOrEmpty(mMeta.Core.MainThreadPriority)) mMeta.Core.MainThreadPriority = desc.Default.MainThreadPriority;
+            if (string.IsNullOrEmpty(mMeta.Core.MainThreadCoreNumber)) mMeta.Core.MainThreadCoreNumber = desc.Default.MainThreadCoreNumber;
+            if (string.IsNullOrEmpty(mMeta.Core.MainThreadStackSize)) mMeta.Core.MainThreadStackSize = desc.Default.MainThreadStackSize;
+            if (string.IsNullOrEmpty(mMeta.Core.SystemResourceSize)) mMeta.Core.SystemResourceSize = "0x0";
+            if (string.IsNullOrEmpty(mMeta.Core.Version)) mMeta.Core.Version = "0";
+            if (string.IsNullOrEmpty(mMeta.Core.Name)) mMeta.Core.Name = "Application";
             //if (string.IsNullOrEmpty(meta.Core.ProductCode)) meta.Core.ProductCode = string.Empty;
 
-            return meta;
+            return mMeta;
         }
 
-        public static DescModel MergeDesc(DescModel desc, MetaModel meta)
+        public static DescModel MergeDesc(DescModel desc, MetaModel meta, bool replace = false)
         {
             if (desc == null) throw new ApplicationException("File .desc was not specified.");
             if (meta == null) throw new ApplicationException("File .nmeta was not specified.");
 
+            DescModel mDesc = replace ? desc : (DescModel)desc.Clone();
+
             if (meta.Core?.FsAccessControlData != null)
             {
-                desc.FsAccessControlDescriptor = new FaDescriptorModel(meta.Core.FsAccessControlData);
+                mDesc.FsAccessControlDescriptor = new FaDescriptorModel(meta.Core.FsAccessControlData);
             }
-            else if (desc.FsAccessControlDescriptor == null && desc.Default?.FsAccessControlData != null)
+            else if (mDesc.FsAccessControlDescriptor == null && mDesc.Default?.FsAccessControlData != null)
             {
-                desc.FsAccessControlDescriptor = new FaDescriptorModel(desc.Default.FsAccessControlData);
+                mDesc.FsAccessControlDescriptor = new FaDescriptorModel(mDesc.Default.FsAccessControlData);
             }
 
             if (meta.Core?.SrvAccessControlData != null)
             {
-                desc.SrvAccessControlDescriptor = new SaDescriptorModel(meta.Core.SrvAccessControlData);
+                mDesc.SrvAccessControlDescriptor = new SaDescriptorModel(meta.Core.SrvAccessControlData);
             }
-            else if (desc.SrvAccessControlDescriptor == null && desc.Default?.SrvAccessControlData != null)
+            else if (mDesc.SrvAccessControlDescriptor == null && mDesc.Default?.SrvAccessControlData != null)
             {
-                desc.SrvAccessControlDescriptor = new SaDescriptorModel(desc.Default.SrvAccessControlData);
+                mDesc.SrvAccessControlDescriptor = new SaDescriptorModel(mDesc.Default.SrvAccessControlData);
             }
 
-            if (meta.Core?.KernelCapabilityData != null && desc.KernelCapabilityDescriptor != null)
+            if (meta.Core?.KernelCapabilityData != null && mDesc.KernelCapabilityDescriptor != null)
             {
-                if (meta.Core.KernelCapabilityData.ThreadInfo != null) desc.KernelCapabilityDescriptor.ThreadInfo = meta.Core.KernelCapabilityData.ThreadInfo;
-                if (meta.Core.KernelCapabilityData.EnableSystemCalls != null) desc.KernelCapabilityDescriptor.EnableSystemCalls = meta.Core.KernelCapabilityData.EnableSystemCalls;
-                if (meta.Core.KernelCapabilityData.AllMemoryMap != null) desc.KernelCapabilityDescriptor.AllMemoryMap = meta.Core.KernelCapabilityData.AllMemoryMap;
-                if (meta.Core.KernelCapabilityData.EnableInterrupts != null) desc.KernelCapabilityDescriptor.EnableInterrupts = meta.Core.KernelCapabilityData.EnableInterrupts;
-                if (meta.Core.KernelCapabilityData.MiscParams != null) desc.KernelCapabilityDescriptor.MiscParams = meta.Core.KernelCapabilityData.MiscParams;
-                if (meta.Core.KernelCapabilityData.KernelVersion != null) desc.KernelCapabilityDescriptor.KernelVersion = meta.Core.KernelCapabilityData.KernelVersion;
-                if (meta.Core.KernelCapabilityData.HandleTableSize != null) desc.KernelCapabilityDescriptor.HandleTableSize = meta.Core.KernelCapabilityData.HandleTableSize;
-                if (meta.Core.KernelCapabilityData.MiscFlags != null) desc.KernelCapabilityDescriptor.MiscFlags = meta.Core.KernelCapabilityData.MiscFlags;
+                if (meta.Core.KernelCapabilityData.ThreadInfo != null) mDesc.KernelCapabilityDescriptor.ThreadInfo = meta.Core.KernelCapabilityData.ThreadInfo;
+                if (meta.Core.KernelCapabilityData.EnableSystemCalls != null) mDesc.KernelCapabilityDescriptor.EnableSystemCalls = meta.Core.KernelCapabilityData.EnableSystemCalls;
+                if (meta.Core.KernelCapabilityData.AllMemoryMap != null) mDesc.KernelCapabilityDescriptor.AllMemoryMap = meta.Core.KernelCapabilityData.AllMemoryMap;
+                if (meta.Core.KernelCapabilityData.EnableInterrupts != null) mDesc.KernelCapabilityDescriptor.EnableInterrupts = meta.Core.KernelCapabilityData.EnableInterrupts;
+                if (meta.Core.KernelCapabilityData.MiscParams != null) mDesc.KernelCapabilityDescriptor.MiscParams = meta.Core.KernelCapabilityData.MiscParams;
+                if (meta.Core.KernelCapabilityData.KernelVersion != null) mDesc.KernelCapabilityDescriptor.KernelVersion = meta.Core.KernelCapabilityData.KernelVersion;
+                if (meta.Core.KernelCapabilityData.HandleTableSize != null) mDesc.KernelCapabilityDescriptor.HandleTableSize = meta.Core.KernelCapabilityData.HandleTableSize;
+                if (meta.Core.KernelCapabilityData.MiscFlags != null) mDesc.KernelCapabilityDescriptor.MiscFlags = meta.Core.KernelCapabilityData.MiscFlags;
             }
             else if (meta.Core?.KernelCapabilityData != null)
             {
-                desc.KernelCapabilityDescriptor = new KcDescriptorModel(meta.Core.KernelCapabilityData);
+                mDesc.KernelCapabilityDescriptor = new KcDescriptorModel(meta.Core.KernelCapabilityData);
             }
-            else if (desc.KernelCapabilityDescriptor == null && desc.Default?.KernelCapabilityData != null)
+            else if (mDesc.KernelCapabilityDescriptor == null && mDesc.Default?.KernelCapabilityData != null)
             {
-                desc.KernelCapabilityDescriptor = new KcDescriptorModel(desc.Default.KernelCapabilityData);
+                mDesc.KernelCapabilityDescriptor = new KcDescriptorModel(mDesc.Default.KernelCapabilityData);
             }
 
-            return desc;
+            return mDesc;
         }
     }
 }

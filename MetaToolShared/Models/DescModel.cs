@@ -9,7 +9,7 @@ using AX9.MetaTool.Structs;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("Desc")]
-    public class DescModel
+    public class DescModel : ICloneable
     {
         public DescModel() { }
         public DescModel(bool initDefault)
@@ -23,6 +23,9 @@ namespace AX9.MetaTool.Models
             }
         }
 
+
+        [XmlIgnore]
+        public bool IsRetail { get; set; } = true;
 
         [XmlElement("MemoryRegion")]
         public byte MemoryRegion { get; set; }
@@ -129,6 +132,7 @@ namespace AX9.MetaTool.Models
                 AcidHeader acidHeader = acidBytes.ToType<AcidHeader>();
                 DescModel desc = new DescModel
                 {
+                    IsRetail = acidHeader.Flags[0] == 1,
                     ProgramIdMin = $"0x{$"{acidHeader.ProgramIdMin:X}".PadLeft(16, '0')}",
                     ProgramIdMax = $"0x{$"{acidHeader.ProgramIdMax:X}".PadLeft(16, '0')}",
                     Default = new DefaultModel
@@ -139,7 +143,7 @@ namespace AX9.MetaTool.Models
                         MainThreadCoreNumberValue = npdmHeader.MainThreadCoreNumber,
                         MainThreadStackSizeValue = npdmHeader.MainThreadStackSize
                     },
-                    RSAKeyValue = new RSAParameters(),
+                    RSAKeyValue = new RSAParameters { Modulus = acidHeader.Modulus },
                     Acid = Convert.ToBase64String(acidBytes),
                     AciHeader = aciHeader,
                     AcidHeader = acidHeader
@@ -187,6 +191,25 @@ namespace AX9.MetaTool.Models
             {
                 throw new Exception($"File {filePath} is corrupted or is not a Desc file");
             }
+        }
+
+        public object Clone()
+        {
+            return new DescModel
+            {
+                IsRetail = IsRetail,
+                MemoryRegion = MemoryRegion,
+                ProgramIdMin = ProgramIdMin,
+                ProgramIdMax = ProgramIdMax,
+                FsAccessControlDescriptor = (FaDescriptorModel)FsAccessControlDescriptor?.Clone(),
+                SrvAccessControlDescriptor = (SaDescriptorModel)SrvAccessControlDescriptor?.Clone(),
+                KernelCapabilityDescriptor = (KcDescriptorModel)KernelCapabilityDescriptor?.Clone(),
+                Default = (DefaultModel)Default?.Clone(),
+                RSAKeyValue = RSAKeyValue,
+                Acid = Acid,
+                AciHeader = AciHeader,
+                AcidHeader = AcidHeader
+            };
         }
     }
 }

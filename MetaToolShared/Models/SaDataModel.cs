@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("SrvAccessControlData")]
-    public class SaDataModel
+    public class SaDataModel : ICloneable
     {
         public SaDataModel() { }
         public SaDataModel(SaDescriptorModel descriptor)
@@ -19,5 +20,14 @@ namespace AX9.MetaTool.Models
 
         [XmlIgnore]
         public int EntriesSize => Entries.Sum((s) => s.BinarySize);
+
+
+        public object Clone()
+        {
+            return new SaDataModel
+            {
+                Entries = (List<SaEntry>)Entries?.Clone(),
+            };
+        }
     }
 }

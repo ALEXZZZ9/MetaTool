@@ -7,7 +7,7 @@ using AX9.MetaTool.Enums;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("KernelCapabilityData")]
-    public class KcDataModel
+    public class KcDataModel : ICloneable
     {
         public KcDataModel() { }
         public KcDataModel(KcDescriptorModel descriptor)
@@ -110,6 +110,21 @@ namespace AX9.MetaTool.Models
             }
 
             return intList;
+        }
+
+        public object Clone()
+        {
+            return new KcDataModel
+            {
+                ThreadInfo = (KcThreadInfoModel)ThreadInfo?.Clone(),
+                EnableSystemCalls = (List<KcEnableSystemCallsModel>)EnableSystemCalls?.Clone(),
+                AllMemoryMap = (List<KcMemoryMapModel>)AllMemoryMap?.Clone(),
+                EnableInterrupts = (List<string>)EnableInterrupts?.Clone(),
+                MiscParams = (KcMiscParamsModel)MiscParams?.Clone(),
+                KernelVersion = (KcKernelVersionModel)KernelVersion?.Clone(),
+                HandleTableSizeValue = (KcHandleTableSizeModel)HandleTableSizeValue?.Clone(),
+                MiscFlags = (KcMiscFlags)MiscFlags?.Clone(),
+            };
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
@@ -133,6 +135,11 @@ namespace AX9.MetaTool
             {
                 throw new ArgumentException($"Invalid decimal number in {tagName}");
             }
+        }
+
+        public static IList<T> Clone<T>(this IList<T> list) where T : ICloneable
+        {
+            return list.Select(i => (T)i.Clone()).ToList();
         }
     }
 }

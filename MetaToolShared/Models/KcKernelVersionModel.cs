@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("KernelVersion")]
-    public class KcKernelVersionModel
+    public class KcKernelVersionModel : ICloneable
     {
         public KcKernelVersionModel()
         {
@@ -81,6 +81,15 @@ namespace AX9.MetaTool.Models
         {
             capability.FieldValue = (uint)(MajorVersionVlaue << 4 | MinorVersionVlaue);
             return capability.Flag;
+        }
+
+        public object Clone()
+        {
+            return new KcKernelVersionModel
+            {
+                MajorVersion = MajorVersion,
+                MinorVersion = MinorVersion
+            };
         }
     }
 }

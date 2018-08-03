@@ -49,26 +49,26 @@ namespace AX9.MetaTool.Structs
         public void Fill(MetaModel meta)
         {
             Magic = Encoding.ASCII.GetBytes("META");
-            Reserved1 = new byte[8];
+            Reserved1 = new byte[0x8];
             Flags = (byte)(Flags | (meta.Core.Is64BitInstructionValue ? 1 : 0));
             Flags = (byte)(Flags | (byte)((byte)meta.Core.ProcessAddressSpaceValue << 1));
             UnusedData = 0;
             MainThreadPriority = meta.Core.MainThreadPriorityValue;
             MainThreadCoreNumber = meta.Core.MainThreadCoreNumberValue;
-            Reserved2 = new byte[8];
+            Reserved2 = new byte[0x8];
             Version = meta.Core.VersionValue;
             MainThreadStackSize = meta.Core.MainThreadStackSizeValue;
-            Name = new byte[16];
+            Name = new byte[0x16];
             if (!string.IsNullOrEmpty(meta.Core.Name))
             {
                 Array.Copy(meta.Core.NameValue, Name, meta.Core.NameValue.Length);
             }
-            ProductCode = new byte[16];
+            ProductCode = new byte[0x16];
             if (!string.IsNullOrEmpty(meta.Core.ProductCode))
             {
                 Array.Copy(meta.Core.ProductCodeValue, ProductCode, meta.Core.ProductCodeValue.Length);
             }
-            Reserved3 = new byte[48];
+            Reserved3 = new byte[0x48];
         }
     }
 }

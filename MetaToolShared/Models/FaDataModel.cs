@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("FsAccessControlData")]
-    public class FaDataModel
+    public class FaDataModel : ICloneable
     {
         public FaDataModel() { }
         public FaDataModel(FaDescriptorModel descriptor)
@@ -23,5 +24,16 @@ namespace AX9.MetaTool.Models
 
         [XmlElement("SaveDataOwnerIds")]
         public List<SaveDataOwnerId> SaveDataOwnerIds { get; set; } = new List<SaveDataOwnerId>();
+
+
+        public object Clone()
+        {
+            return new FaDataModel
+            {
+                FlagPresets = (List<string>)FlagPresets?.Clone(),
+                ContentOwnerIds = (List<string>)ContentOwnerIds?.Clone(),
+                SaveDataOwnerIds = (List<SaveDataOwnerId>)SaveDataOwnerIds?.Clone(),
+            };
+        }
     }
 }

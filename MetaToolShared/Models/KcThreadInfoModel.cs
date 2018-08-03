@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("ThreadInfo")]
-    public class KcThreadInfoModel
+    public class KcThreadInfoModel : ICloneable
     {
         public KcThreadInfoModel()
         {
@@ -150,6 +150,17 @@ namespace AX9.MetaTool.Models
             if (MaxCoreNumber == null) throw new ArgumentException("Not Found ThreadInfo/MaxCoreNumber");
 
             return true;
+        }
+
+        public object Clone()
+        {
+            return new KcThreadInfoModel
+            {
+                LowestPriority = LowestPriority,
+                HighestPriority = HighestPriority,
+                MinCoreNumber = MinCoreNumber,
+                MaxCoreNumber = MaxCoreNumber,
+            };
         }
     }
 }

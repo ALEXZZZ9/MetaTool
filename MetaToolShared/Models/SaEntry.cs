@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("Entry")]
-    public class SaEntry
+    public class SaEntry : ICloneable
     {
         [XmlIgnore]
         public bool IsServerValue
@@ -63,6 +63,15 @@ namespace AX9.MetaTool.Models
             array[0] = b;
             Array.Copy(Encoding.ASCII.GetBytes(Name), 0, array, 1, Name.Length);
             return array;
+        }
+
+        public object Clone()
+        {
+            return new SaEntry
+            {
+                IsServer = IsServer,
+                Name = Name
+            };
         }
     }
 }

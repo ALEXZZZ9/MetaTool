@@ -5,7 +5,7 @@ using AX9.MetaTool.Enums;
 
 namespace AX9.MetaTool.Models
 {
-    public class DefaultModel
+    public class DefaultModel : ICloneable
     {
         public DefaultModel() { }
         public DefaultModel(bool initDefault)
@@ -181,6 +181,21 @@ namespace AX9.MetaTool.Models
             if (MainThreadPriority == null) throw new ArgumentException("Not Found Default/MainThreadPriority");
             if (MainThreadCoreNumber == null) throw new ArgumentException("Not Found Default/MainThreadCoreNumber");
             if (MainThreadStackSize == null) throw new ArgumentException("Not Found Default/MainThreadStackSize");
+        }
+
+        public object Clone()
+        {
+            return new DefaultModel
+            {
+                Is64BitInstruction = Is64BitInstruction,
+                ProcessAddressSpace = ProcessAddressSpace,
+                MainThreadPriority = MainThreadPriority,
+                MainThreadCoreNumber = MainThreadCoreNumber,
+                MainThreadStackSize = MainThreadStackSize,
+                FsAccessControlData = (FaDataModel)FsAccessControlData?.Clone(),
+                SrvAccessControlData = (SaDataModel)SrvAccessControlData?.Clone(),
+                KernelCapabilityData = (KcDataModel)KernelCapabilityData?.Clone()
+            };
         }
     }
 }

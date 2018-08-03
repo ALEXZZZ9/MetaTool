@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace AX9.MetaTool.Models
 {
-    public class KcHandleTableSizeModel
+    public class KcHandleTableSizeModel : ICloneable
     {
         public KcHandleTableSizeModel()
         {
@@ -34,6 +34,14 @@ namespace AX9.MetaTool.Models
         {
             capability.FieldValue = HandleTableSize;
             return capability.Flag;
+        }
+
+        public object Clone()
+        {
+            return new KcHandleTableSizeModel
+            {
+                HandleTableSize = HandleTableSize
+            };
         }
     }
 }

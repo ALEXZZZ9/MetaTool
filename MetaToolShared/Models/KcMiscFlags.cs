@@ -1,9 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("MiscFlags")]
-    public class KcMiscFlags
+    public class KcMiscFlags : ICloneable
     {
         public KcMiscFlags()
         {
@@ -84,6 +85,15 @@ namespace AX9.MetaTool.Models
         public bool CheckSuccessToRead()
         {
             return EnableDebug != null || ForceDebug != null;
+        }
+
+        public object Clone()
+        {
+            return new KcMiscFlags
+            {
+                EnableDebug = EnableDebug,
+                ForceDebug = ForceDebug
+            };
         }
     }
 }

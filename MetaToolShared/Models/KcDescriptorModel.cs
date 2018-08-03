@@ -7,7 +7,7 @@ using AX9.MetaTool.Enums;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("KernelCapabilityDescriptor")]
-    public class KcDescriptorModel
+    public class KcDescriptorModel : ICloneable
     {
         public KcDescriptorModel() { }
         public KcDescriptorModel(KcDataModel data)
@@ -377,17 +377,17 @@ namespace AX9.MetaTool.Models
         }
 
 
-        public void CheckCapabilities(DefaultModel @default)
+        public void CheckCapabilities(KcDataModel data)
         {
-            if (@default == null) return;
-            CheckThreadInfo(@default.KernelCapabilityData.ThreadInfo);
-            CheckEnableSystemCalls(@default.KernelCapabilityData.SystemCallList);
-            CheckMemoryMaps(@default.KernelCapabilityData.AllMemoryMap);
-            CheckEnableInterrupts(@default.KernelCapabilityData.GetIntList());
-            CheckMiscParams(@default.KernelCapabilityData.MiscParams);
-            CheckKernelVersion(@default.KernelCapabilityData.KernelVersion);
-            CheckHandleTableSize(@default.KernelCapabilityData.HandleTableSizeValue);
-            CheckMiscFlags(@default.KernelCapabilityData.MiscFlags);
+            if (data == null) return;
+            CheckThreadInfo(data.ThreadInfo);
+            CheckEnableSystemCalls(data.SystemCallList);
+            CheckMemoryMaps(data.AllMemoryMap);
+            CheckEnableInterrupts(data.GetIntList());
+            CheckMiscParams(data.MiscParams);
+            CheckKernelVersion(data.KernelVersion);
+            CheckHandleTableSize(data.HandleTableSizeValue);
+            CheckMiscFlags(data.MiscFlags);
         }
 
         public void CheckThreadInfo(KcThreadInfoModel defaultThreadInfo)
@@ -476,6 +476,21 @@ namespace AX9.MetaTool.Models
             if (defaultMiscFlags == null) throw new ArgumentException("MiscFlags is outside the allowed range.");
             if (MiscFlags.EnableDebugValue && !defaultMiscFlags.EnableDebugValue) throw new ArgumentException("MiscFlags/EnableDebug is outside the allowed range.");
             if (MiscFlags.ForceDebugValue && !defaultMiscFlags.ForceDebugValue) throw new ArgumentException("MiscFlags/ForceDebug is outside the allowed range.");
+        }
+
+        public object Clone()
+        {
+            return new KcDescriptorModel
+            {
+                ThreadInfo = (KcThreadInfoModel)ThreadInfo?.Clone(),
+                EnableSystemCalls = (List<KcEnableSystemCallsModel>)EnableSystemCalls?.Clone(),
+                AllMemoryMap = (List<KcMemoryMapModel>)AllMemoryMap?.Clone(),
+                EnableInterrupts = (List<string>)EnableInterrupts?.Clone(),
+                MiscParams = (KcMiscParamsModel)MiscParams?.Clone(),
+                KernelVersion = (KcKernelVersionModel)KernelVersion?.Clone(),
+                HandleTableSizeValue = (KcHandleTableSizeModel)HandleTableSizeValue?.Clone(),
+                MiscFlags = (KcMiscFlags)MiscFlags?.Clone(),
+            };
         }
     }
 }

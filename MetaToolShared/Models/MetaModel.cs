@@ -6,7 +6,7 @@ using AX9.MetaTool.Structs;
 namespace AX9.MetaTool.Models
 {
     [XmlRoot("Meta")]
-    public class MetaModel
+    public class MetaModel : ICloneable
     {
         [XmlElement("Core")]
         public CoreModel Core { get; set; }
@@ -30,6 +30,15 @@ namespace AX9.MetaTool.Models
             {
                 throw new Exception($"File {filePath} is corrupted or is not a Meta file");
             }
+        }
+
+        public object Clone()
+        {
+            return new MetaModel
+            {
+                Core = (CoreModel)Core?.Clone(),
+                ApplicationControlData = (XmlElement[])ApplicationControlData?.Clone(),
+            };
         }
     }
 }

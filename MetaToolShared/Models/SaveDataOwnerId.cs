@@ -4,7 +4,7 @@ using AX9.MetaTool.Enums;
 
 namespace AX9.MetaTool.Models
 {
-    public class SaveDataOwnerId
+    public class SaveDataOwnerId : ICloneable
     {
         [XmlIgnore]
         public SaveDataAccessibilityEnum AccessibilityValue
@@ -25,7 +25,7 @@ namespace AX9.MetaTool.Models
             get => accessibility;
             set
             {
-                if (value == null) return;
+                if (string.IsNullOrEmpty(value)) return;
                 
                 accessibilityValue = (SaveDataAccessibilityEnum)Enum.Parse(typeof(SaveDataAccessibilityEnum), value);
                 accessibility = value;
@@ -38,5 +38,15 @@ namespace AX9.MetaTool.Models
 
         private SaveDataAccessibilityEnum accessibilityValue;
         private string accessibility;
+
+
+        public object Clone()
+        {
+            return new SaveDataOwnerId
+            {
+                Accessibility = Accessibility,
+                Id = Id,
+            };
+        }
     }
 }

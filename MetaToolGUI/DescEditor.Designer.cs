@@ -51,54 +51,55 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.DENUD_HighestPriority = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.DENUD_LowestPriority = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.DENUD_MaxCoreNumber = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.DENUD_MinCoreNumber = new System.Windows.Forms.NumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.DECB_ProgramType = new System.Windows.Forms.ComboBox();
+            this.DETB_MainThreadStackSize = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.DECB_EnableDebug = new System.Windows.Forms.CheckBox();
+            this.DECB_ForceDebug = new System.Windows.Forms.CheckBox();
+            this.DENUD_MainThreadCoreNumber = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.DECB_ProcessAddressSpace = new System.Windows.Forms.ComboBox();
+            this.DENUD_HandleTableSize = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.DENUD_MinorVersion = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
             this.DENUD_MajorVersion = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
-            this.DENUD_HandleTableSize = new System.Windows.Forms.NumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.DECB_EnableDebug = new System.Windows.Forms.CheckBox();
-            this.DECB_ForceDebug = new System.Windows.Forms.CheckBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.DECB_ProcessAddressSpace = new System.Windows.Forms.ComboBox();
-            this.DENUD_MainThreadPriority = new System.Windows.Forms.NumericUpDown();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.DECB_ProgramType = new System.Windows.Forms.ComboBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.DENUD_MinCoreNumber = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.DENUD_MaxCoreNumber = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.DENUD_LowestPriority = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.DENUD_HighestPriority = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.DENUD_MainThreadCoreNumber = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.DETB_MainThreadStackSize = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
+            this.DENUD_MainThreadPriority = new System.Windows.Forms.NumericUpDown();
             this.DEB_Save = new System.Windows.Forms.Button();
             this.DEB_SaveAs = new System.Windows.Forms.Button();
+            this.DEB_UpdateAcid = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MemoryRegion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DEDGV_SrvAccess)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MaxCoreNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinCoreNumber)).BeginInit();
-            this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadCoreNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HandleTableSize)).BeginInit();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinorVersion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MajorVersion)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HandleTableSize)).BeginInit();
+            this.groupBox5.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinCoreNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MaxCoreNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadPriority)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadCoreNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -411,142 +412,100 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Kernel";
             // 
-            // groupBox4
+            // DETB_MainThreadStackSize
             // 
-            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.DETB_MainThreadStackSize.Location = new System.Drawing.Point(125, 459);
+            this.DETB_MainThreadStackSize.MaxLength = 10;
+            this.DETB_MainThreadStackSize.Name = "DETB_MainThreadStackSize";
+            this.DETB_MainThreadStackSize.Size = new System.Drawing.Size(180, 20);
+            this.DETB_MainThreadStackSize.TabIndex = 24;
+            // 
+            // label18
+            // 
+            this.label18.Location = new System.Drawing.Point(5, 459);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(120, 20);
+            this.label18.TabIndex = 23;
+            this.label18.Text = "MainThreadStackSize:";
+            // 
+            // DECB_EnableDebug
+            // 
+            this.DECB_EnableDebug.Location = new System.Drawing.Point(45, 483);
+            this.DECB_EnableDebug.Name = "DECB_EnableDebug";
+            this.DECB_EnableDebug.Size = new System.Drawing.Size(100, 20);
+            this.DECB_EnableDebug.TabIndex = 32;
+            this.DECB_EnableDebug.Text = "EnableDebug";
+            this.DECB_EnableDebug.UseVisualStyleBackColor = true;
+            // 
+            // DECB_ForceDebug
+            // 
+            this.DECB_ForceDebug.Location = new System.Drawing.Point(151, 483);
+            this.DECB_ForceDebug.Name = "DECB_ForceDebug";
+            this.DECB_ForceDebug.Size = new System.Drawing.Size(100, 20);
+            this.DECB_ForceDebug.TabIndex = 33;
+            this.DECB_ForceDebug.Text = "ForceDebug";
+            this.DECB_ForceDebug.UseVisualStyleBackColor = true;
+            // 
+            // DENUD_MainThreadCoreNumber
+            // 
+            this.DENUD_MainThreadCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.DENUD_MinCoreNumber);
-            this.groupBox4.Controls.Add(this.label10);
-            this.groupBox4.Controls.Add(this.DENUD_MaxCoreNumber);
-            this.groupBox4.Controls.Add(this.label9);
-            this.groupBox4.Controls.Add(this.DENUD_LowestPriority);
-            this.groupBox4.Controls.Add(this.label6);
-            this.groupBox4.Controls.Add(this.DENUD_HighestPriority);
-            this.groupBox4.Controls.Add(this.label3);
-            this.groupBox4.Location = new System.Drawing.Point(5, 15);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(300, 115);
-            this.groupBox4.TabIndex = 23;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Thread Info";
-            // 
-            // DENUD_HighestPriority
-            // 
-            this.DENUD_HighestPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_HighestPriority.Location = new System.Drawing.Point(120, 15);
-            this.DENUD_HighestPriority.Maximum = new decimal(new int[] {
-            63,
+            this.DENUD_MainThreadCoreNumber.Location = new System.Drawing.Point(125, 433);
+            this.DENUD_MainThreadCoreNumber.Maximum = new decimal(new int[] {
+            99,
             0,
             0,
             0});
-            this.DENUD_HighestPriority.Name = "DENUD_HighestPriority";
-            this.DENUD_HighestPriority.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_HighestPriority.TabIndex = 24;
+            this.DENUD_MainThreadCoreNumber.Name = "DENUD_MainThreadCoreNumber";
+            this.DENUD_MainThreadCoreNumber.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_MainThreadCoreNumber.TabIndex = 35;
             // 
-            // label3
+            // label17
             // 
-            this.label3.Location = new System.Drawing.Point(10, 15);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(93, 20);
-            this.label3.TabIndex = 23;
-            this.label3.Text = "HighestPriority:";
+            this.label17.Location = new System.Drawing.Point(5, 433);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(120, 20);
+            this.label17.TabIndex = 34;
+            this.label17.Text = "MainThreadCoreNumber:";
             // 
-            // DENUD_LowestPriority
+            // label12
             // 
-            this.DENUD_LowestPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label12.Location = new System.Drawing.Point(5, 381);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(120, 20);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "ProcessAddressSpace:";
+            // 
+            // DECB_ProcessAddressSpace
+            // 
+            this.DECB_ProcessAddressSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DECB_ProcessAddressSpace.FormattingEnabled = true;
+            this.DECB_ProcessAddressSpace.Location = new System.Drawing.Point(125, 380);
+            this.DECB_ProcessAddressSpace.Name = "DECB_ProcessAddressSpace";
+            this.DECB_ProcessAddressSpace.Size = new System.Drawing.Size(180, 21);
+            this.DECB_ProcessAddressSpace.TabIndex = 25;
+            // 
+            // DENUD_HandleTableSize
+            // 
+            this.DENUD_HandleTableSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_LowestPriority.Location = new System.Drawing.Point(120, 41);
-            this.DENUD_LowestPriority.Maximum = new decimal(new int[] {
-            63,
+            this.DENUD_HandleTableSize.Location = new System.Drawing.Point(125, 255);
+            this.DENUD_HandleTableSize.Maximum = new decimal(new int[] {
+            1023,
             0,
             0,
             0});
-            this.DENUD_LowestPriority.Name = "DENUD_LowestPriority";
-            this.DENUD_LowestPriority.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_LowestPriority.TabIndex = 26;
+            this.DENUD_HandleTableSize.Name = "DENUD_HandleTableSize";
+            this.DENUD_HandleTableSize.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_HandleTableSize.TabIndex = 28;
             // 
-            // label6
+            // label11
             // 
-            this.label6.Location = new System.Drawing.Point(10, 41);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(93, 20);
-            this.label6.TabIndex = 25;
-            this.label6.Text = "LowestPriority:";
-            // 
-            // DENUD_MaxCoreNumber
-            // 
-            this.DENUD_MaxCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_MaxCoreNumber.Location = new System.Drawing.Point(120, 67);
-            this.DENUD_MaxCoreNumber.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.DENUD_MaxCoreNumber.Name = "DENUD_MaxCoreNumber";
-            this.DENUD_MaxCoreNumber.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_MaxCoreNumber.TabIndex = 28;
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(10, 67);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(93, 20);
-            this.label9.TabIndex = 27;
-            this.label9.Text = "MaxCoreNumber:";
-            // 
-            // DENUD_MinCoreNumber
-            // 
-            this.DENUD_MinCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_MinCoreNumber.Location = new System.Drawing.Point(120, 93);
-            this.DENUD_MinCoreNumber.Maximum = new decimal(new int[] {
-            63,
-            0,
-            0,
-            0});
-            this.DENUD_MinCoreNumber.Name = "DENUD_MinCoreNumber";
-            this.DENUD_MinCoreNumber.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_MinCoreNumber.TabIndex = 30;
-            // 
-            // label10
-            // 
-            this.label10.Location = new System.Drawing.Point(10, 93);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(93, 20);
-            this.label10.TabIndex = 29;
-            this.label10.Text = "MinCoreNumber:";
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox5.Controls.Add(this.label14);
-            this.groupBox5.Controls.Add(this.DECB_ProgramType);
-            this.groupBox5.Location = new System.Drawing.Point(5, 136);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(300, 40);
-            this.groupBox5.TabIndex = 31;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Misc Params";
-            // 
-            // label14
-            // 
-            this.label14.Location = new System.Drawing.Point(10, 15);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(93, 20);
-            this.label14.TabIndex = 23;
-            this.label14.Text = "ProgramType:";
-            // 
-            // DECB_ProgramType
-            // 
-            this.DECB_ProgramType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DECB_ProgramType.FormattingEnabled = true;
-            this.DECB_ProgramType.Location = new System.Drawing.Point(120, 15);
-            this.DECB_ProgramType.Name = "DECB_ProgramType";
-            this.DECB_ProgramType.Size = new System.Drawing.Size(180, 21);
-            this.DECB_ProgramType.TabIndex = 23;
+            this.label11.Location = new System.Drawing.Point(5, 255);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(93, 20);
+            this.label11.TabIndex = 27;
+            this.label11.Text = "HandleTableSize:";
             // 
             // groupBox6
             // 
@@ -607,62 +566,150 @@
             this.label15.TabIndex = 23;
             this.label15.Text = "MajorVersion:";
             // 
-            // DENUD_HandleTableSize
+            // groupBox5
             // 
-            this.DENUD_HandleTableSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_HandleTableSize.Location = new System.Drawing.Point(125, 255);
-            this.DENUD_HandleTableSize.Maximum = new decimal(new int[] {
-            1023,
+            this.groupBox5.Controls.Add(this.label14);
+            this.groupBox5.Controls.Add(this.DECB_ProgramType);
+            this.groupBox5.Location = new System.Drawing.Point(5, 136);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(300, 40);
+            this.groupBox5.TabIndex = 31;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Misc Params";
+            // 
+            // label14
+            // 
+            this.label14.Location = new System.Drawing.Point(10, 15);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(93, 20);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "ProgramType:";
+            // 
+            // DECB_ProgramType
+            // 
+            this.DECB_ProgramType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DECB_ProgramType.FormattingEnabled = true;
+            this.DECB_ProgramType.Location = new System.Drawing.Point(120, 15);
+            this.DECB_ProgramType.Name = "DECB_ProgramType";
+            this.DECB_ProgramType.Size = new System.Drawing.Size(180, 21);
+            this.DECB_ProgramType.TabIndex = 23;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Controls.Add(this.DENUD_MinCoreNumber);
+            this.groupBox4.Controls.Add(this.label10);
+            this.groupBox4.Controls.Add(this.DENUD_MaxCoreNumber);
+            this.groupBox4.Controls.Add(this.label9);
+            this.groupBox4.Controls.Add(this.DENUD_LowestPriority);
+            this.groupBox4.Controls.Add(this.label6);
+            this.groupBox4.Controls.Add(this.DENUD_HighestPriority);
+            this.groupBox4.Controls.Add(this.label3);
+            this.groupBox4.Location = new System.Drawing.Point(5, 15);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(300, 115);
+            this.groupBox4.TabIndex = 23;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Thread Info";
+            // 
+            // DENUD_MinCoreNumber
+            // 
+            this.DENUD_MinCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DENUD_MinCoreNumber.Location = new System.Drawing.Point(120, 93);
+            this.DENUD_MinCoreNumber.Maximum = new decimal(new int[] {
+            63,
             0,
             0,
             0});
-            this.DENUD_HandleTableSize.Name = "DENUD_HandleTableSize";
-            this.DENUD_HandleTableSize.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_HandleTableSize.TabIndex = 28;
+            this.DENUD_MinCoreNumber.Name = "DENUD_MinCoreNumber";
+            this.DENUD_MinCoreNumber.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_MinCoreNumber.TabIndex = 30;
             // 
-            // label11
+            // label10
             // 
-            this.label11.Location = new System.Drawing.Point(5, 255);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(93, 20);
-            this.label11.TabIndex = 27;
-            this.label11.Text = "HandleTableSize:";
+            this.label10.Location = new System.Drawing.Point(10, 93);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(93, 20);
+            this.label10.TabIndex = 29;
+            this.label10.Text = "MinCoreNumber:";
             // 
-            // DECB_EnableDebug
+            // DENUD_MaxCoreNumber
             // 
-            this.DECB_EnableDebug.Location = new System.Drawing.Point(45, 483);
-            this.DECB_EnableDebug.Name = "DECB_EnableDebug";
-            this.DECB_EnableDebug.Size = new System.Drawing.Size(100, 20);
-            this.DECB_EnableDebug.TabIndex = 32;
-            this.DECB_EnableDebug.Text = "EnableDebug";
-            this.DECB_EnableDebug.UseVisualStyleBackColor = true;
+            this.DENUD_MaxCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DENUD_MaxCoreNumber.Location = new System.Drawing.Point(120, 67);
+            this.DENUD_MaxCoreNumber.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.DENUD_MaxCoreNumber.Name = "DENUD_MaxCoreNumber";
+            this.DENUD_MaxCoreNumber.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_MaxCoreNumber.TabIndex = 28;
             // 
-            // DECB_ForceDebug
+            // label9
             // 
-            this.DECB_ForceDebug.Location = new System.Drawing.Point(151, 483);
-            this.DECB_ForceDebug.Name = "DECB_ForceDebug";
-            this.DECB_ForceDebug.Size = new System.Drawing.Size(100, 20);
-            this.DECB_ForceDebug.TabIndex = 33;
-            this.DECB_ForceDebug.Text = "ForceDebug";
-            this.DECB_ForceDebug.UseVisualStyleBackColor = true;
+            this.label9.Location = new System.Drawing.Point(10, 67);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(93, 20);
+            this.label9.TabIndex = 27;
+            this.label9.Text = "MaxCoreNumber:";
             // 
-            // label12
+            // DENUD_LowestPriority
             // 
-            this.label12.Location = new System.Drawing.Point(5, 381);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(120, 20);
-            this.label12.TabIndex = 24;
-            this.label12.Text = "ProcessAddressSpace:";
+            this.DENUD_LowestPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DENUD_LowestPriority.Location = new System.Drawing.Point(120, 41);
+            this.DENUD_LowestPriority.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.DENUD_LowestPriority.Name = "DENUD_LowestPriority";
+            this.DENUD_LowestPriority.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_LowestPriority.TabIndex = 26;
             // 
-            // DECB_ProcessAddressSpace
+            // label6
             // 
-            this.DECB_ProcessAddressSpace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DECB_ProcessAddressSpace.FormattingEnabled = true;
-            this.DECB_ProcessAddressSpace.Location = new System.Drawing.Point(125, 380);
-            this.DECB_ProcessAddressSpace.Name = "DECB_ProcessAddressSpace";
-            this.DECB_ProcessAddressSpace.Size = new System.Drawing.Size(180, 21);
-            this.DECB_ProcessAddressSpace.TabIndex = 25;
+            this.label6.Location = new System.Drawing.Point(10, 41);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(93, 20);
+            this.label6.TabIndex = 25;
+            this.label6.Text = "LowestPriority:";
+            // 
+            // DENUD_HighestPriority
+            // 
+            this.DENUD_HighestPriority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DENUD_HighestPriority.Location = new System.Drawing.Point(120, 15);
+            this.DENUD_HighestPriority.Maximum = new decimal(new int[] {
+            63,
+            0,
+            0,
+            0});
+            this.DENUD_HighestPriority.Name = "DENUD_HighestPriority";
+            this.DENUD_HighestPriority.Size = new System.Drawing.Size(180, 20);
+            this.DENUD_HighestPriority.TabIndex = 24;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(10, 15);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(93, 20);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "HighestPriority:";
+            // 
+            // label16
+            // 
+            this.label16.Location = new System.Drawing.Point(5, 407);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(93, 20);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "MainThreadPriority:";
             // 
             // DENUD_MainThreadPriority
             // 
@@ -677,52 +724,6 @@
             this.DENUD_MainThreadPriority.Name = "DENUD_MainThreadPriority";
             this.DENUD_MainThreadPriority.Size = new System.Drawing.Size(180, 20);
             this.DENUD_MainThreadPriority.TabIndex = 33;
-            // 
-            // label16
-            // 
-            this.label16.Location = new System.Drawing.Point(5, 407);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(93, 20);
-            this.label16.TabIndex = 32;
-            this.label16.Text = "MainThreadPriority:";
-            // 
-            // DENUD_MainThreadCoreNumber
-            // 
-            this.DENUD_MainThreadCoreNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DENUD_MainThreadCoreNumber.Location = new System.Drawing.Point(125, 433);
-            this.DENUD_MainThreadCoreNumber.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.DENUD_MainThreadCoreNumber.Name = "DENUD_MainThreadCoreNumber";
-            this.DENUD_MainThreadCoreNumber.Size = new System.Drawing.Size(180, 20);
-            this.DENUD_MainThreadCoreNumber.TabIndex = 35;
-            // 
-            // label17
-            // 
-            this.label17.Location = new System.Drawing.Point(5, 433);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(120, 20);
-            this.label17.TabIndex = 34;
-            this.label17.Text = "MainThreadCoreNumber:";
-            // 
-            // DETB_MainThreadStackSize
-            // 
-            this.DETB_MainThreadStackSize.Location = new System.Drawing.Point(125, 459);
-            this.DETB_MainThreadStackSize.MaxLength = 10;
-            this.DETB_MainThreadStackSize.Name = "DETB_MainThreadStackSize";
-            this.DETB_MainThreadStackSize.Size = new System.Drawing.Size(180, 20);
-            this.DETB_MainThreadStackSize.TabIndex = 24;
-            // 
-            // label18
-            // 
-            this.label18.Location = new System.Drawing.Point(5, 459);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(120, 20);
-            this.label18.TabIndex = 23;
-            this.label18.Text = "MainThreadStackSize:";
             // 
             // DEB_Save
             // 
@@ -744,11 +745,22 @@
             this.DEB_SaveAs.UseVisualStyleBackColor = true;
             this.DEB_SaveAs.Click += new System.EventHandler(this.DEB_SaveAs_Click);
             // 
+            // DEB_UpdateAcid
+            // 
+            this.DEB_UpdateAcid.Location = new System.Drawing.Point(86, 409);
+            this.DEB_UpdateAcid.Name = "DEB_UpdateAcid";
+            this.DEB_UpdateAcid.Size = new System.Drawing.Size(21, 21);
+            this.DEB_UpdateAcid.TabIndex = 36;
+            this.DEB_UpdateAcid.Text = "⟳";
+            this.DEB_UpdateAcid.UseVisualStyleBackColor = true;
+            this.DEB_UpdateAcid.Click += new System.EventHandler(this.DEB_UpdateAcid_Click);
+            // 
             // DescEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 546);
+            this.Controls.Add(this.DEB_UpdateAcid);
             this.Controls.Add(this.DEB_SaveAs);
             this.Controls.Add(this.DEB_Save);
             this.Controls.Add(this.groupBox3);
@@ -776,18 +788,18 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MaxCoreNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinCoreNumber)).EndInit();
-            this.groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadCoreNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HandleTableSize)).EndInit();
             this.groupBox6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinorVersion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MajorVersion)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HandleTableSize)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MinCoreNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MaxCoreNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadPriority)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadCoreNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -848,5 +860,6 @@
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Button DEB_Save;
         private System.Windows.Forms.Button DEB_SaveAs;
+        private System.Windows.Forms.Button DEB_UpdateAcid;
     }
 }
