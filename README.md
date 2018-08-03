@@ -1,6 +1,15 @@
 MetaTool For Nintendo Switch
 ===========================
-Tool for converting npdm files to desc files.
+Tools for working with npdm, desc files.
+
+Features
+=====
+MetaTool
+* Сonverting npdm files to desc files.
+
+MetaToolGUI
+* Сonverting npdm files to desc files.
+* Desc editor.
 
 Usage
 =====
