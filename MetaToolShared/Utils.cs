@@ -38,9 +38,24 @@ namespace AX9.MetaTool
             return structure;
         }
 
+        public static byte[] ToBytes(object structure, uint size)
+        {
+            byte[] bytes = new byte[size];
+            GCHandle gchandle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+            Marshal.StructureToPtr(structure, gchandle.AddrOfPinnedObject(), false);
+            gchandle.Free();
+
+            return bytes;
+        }
+
         public static int RoundUp(int target, uint align)
         {
             return (int)(target + (align - 1u) & (long)~(ulong)(align - 1u));
+        }
+
+        public static uint RoundUp(uint target, uint align)
+        {
+            return target + (align - 1u) & ~(align - 1u);
         }
 
         public static string XMLSerialize<T>(this T value)

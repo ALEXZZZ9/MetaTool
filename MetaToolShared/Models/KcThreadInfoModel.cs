@@ -8,8 +8,8 @@ namespace AX9.MetaTool.Models
     {
         public KcThreadInfoModel()
         {
-            HighestPriorityValue = 59;
-            LowestPriorityValue = 28;
+            HighestPriorityValue = 28;
+            LowestPriorityValue = 59;
             MinCoreNumberValue = 0;
             MaxCoreNumberValue = 2;
         }
@@ -28,8 +28,7 @@ namespace AX9.MetaTool.Models
             }
         }
 
-        //[XmlElement("LowestPriority", IsNullable = false)]
-        [XmlElement("HighestPriority", IsNullable = false)]
+        [XmlElement("LowestPriority", IsNullable = false)]
         public string LowestPriority
         {
             get => lowestPriority;
@@ -55,8 +54,7 @@ namespace AX9.MetaTool.Models
             }
         }
 
-        //[XmlElement("HighestPriority", IsNullable = false)]
-        [XmlElement("LowestPriority", IsNullable = false)]
+        [XmlElement("HighestPriority", IsNullable = false)]
         public string HighestPriority
         {
             get => highestPriority;

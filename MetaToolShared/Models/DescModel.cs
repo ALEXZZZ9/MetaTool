@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using AX9.MetaTool.Enums;
+using AX9.MetaTool.Structs;
 
 namespace AX9.MetaTool.Models
 {
@@ -11,8 +14,8 @@ namespace AX9.MetaTool.Models
         public DescModel()
         {
             MemoryRegion = 0;
-            ProgramIdMinValue = 0x0100000000010000;
-            ProgramIdMaxValue = 0x01FFFFFFFFFFFFFF;
+            ProgramIdMin = "0x0100000000010000";
+            ProgramIdMax = "0x01FFFFFFFFFFFFFF";
         }
 
 
@@ -85,6 +88,10 @@ namespace AX9.MetaTool.Models
         [XmlElement("Acid", IsNullable = false)]
         public string Acid { get; set; }
 
+        [XmlIgnore]
+        public AciHeader AciHeader;
+        [XmlIgnore]
+        public AcidHeader AcidHeader;
 
         private ulong programIdMinValue;
         private string programIdMin;
@@ -97,34 +104,73 @@ namespace AX9.MetaTool.Models
             return RSAKeyValue.Modulus != null;
         }
 
-        public static DescModel FromNpdm(NpdmModel npdm)
+        public static async Task<DescModel> FromNpdm(string filePatch)
         {
-            DescModel desc = new DescModel
+            using (Stream stream = File.OpenRead(filePatch))
             {
-                ProgramIdMin = $"0x{$"{npdm.AcidModel.Header.ProgramIdMin:X}".PadLeft(16, '0')}",
-                ProgramIdMax = $"0x{$"{npdm.AcidModel.Header.ProgramIdMax:X}".PadLeft(16, '0')}",
-                FsAccessControlDescriptor = npdm.AciModel.FaDescriptor,
-                SrvAccessControlDescriptor = npdm.AciModel.SaDescriptor,
-                KernelCapabilityDescriptor = npdm.AciModel.KcDescriptor,
-                Default = new DefaultModel
-                {
-                    Is64BitInstructionValue = (npdm.Header.Flags & 1) == 1,
-                    ProcessAddressSpace = Enum.GetValues(typeof(ProcessAddressSpacesEnum)).GetValue(((npdm.Header.Flags & 14) >> 1)).ToString(),
-                    MainThreadPriorityValue = npdm.Header.MainThreadPriority,
-                    MainThreadCoreNumberValue = npdm.Header.MainThreadCoreNumber,
-                    MainThreadStackSizeValue = npdm.Header.MainThreadStackSize,
-                    FsAccessControlData = new FaDataModel(npdm.AciModel.FaDescriptor),
-                    SrvAccessControlData = new SaDataModel(npdm.AciModel.SaDescriptor),
-                    KernelCapabilityData = new KcDataModel(npdm.AciModel.KcDescriptor)
-                },
-                RSAKeyValue = new RSAParameters(),
-                Acid = Convert.ToBase64String(npdm.AcidModel.ACID)
-            };
+                NpdmHeader npdmHeader = stream.ToType<NpdmHeader>();
 
-            return desc;
+                byte[] acidBytes = new byte[npdmHeader.AcidSize];
+                stream.Seek(npdmHeader.AcidOffset, SeekOrigin.Begin);
+                await stream.ReadAsync(acidBytes, 0, (int)npdmHeader.AcidSize);
+
+                byte[] aciBytes = new byte[npdmHeader.AciSize];
+                stream.Seek(npdmHeader.AciOffset, SeekOrigin.Begin);
+                await stream.ReadAsync(aciBytes, 0, (int)npdmHeader.AciSize);
+
+                stream.Close();
+
+                AciHeader aciHeader = aciBytes.ToType<AciHeader>();
+                AcidHeader acidHeader = acidBytes.ToType<AcidHeader>();
+                DescModel desc = new DescModel
+                {
+                    ProgramIdMin = $"0x{$"{acidHeader.ProgramIdMin:X}".PadLeft(16, '0')}",
+                    ProgramIdMax = $"0x{$"{acidHeader.ProgramIdMax:X}".PadLeft(16, '0')}",
+                    Default = new DefaultModel
+                    {
+                        Is64BitInstructionValue = (npdmHeader.Flags & 1) == 1,
+                        ProcessAddressSpace = Enum.GetValues(typeof(ProcessAddressSpacesEnum)).GetValue(((npdmHeader.Flags & 14) >> 1)).ToString(),
+                        MainThreadPriorityValue = npdmHeader.MainThreadPriority,
+                        MainThreadCoreNumberValue = npdmHeader.MainThreadCoreNumber,
+                        MainThreadStackSizeValue = npdmHeader.MainThreadStackSize
+                    },
+                    RSAKeyValue = new RSAParameters(),
+                    Acid = Convert.ToBase64String(acidBytes),
+                    AciHeader = aciHeader,
+                    AcidHeader = acidHeader
+                };
+
+                if (aciHeader.FacSize > 0)
+                {
+                    byte[] facBytes = new byte[aciHeader.FacSize];
+                    Buffer.BlockCopy(aciBytes, (int)aciHeader.FacOffset, facBytes, 0, (int)aciHeader.FacSize);
+
+                    desc.FsAccessControlDescriptor = FaDescriptorModel.FromNpdmBytes(facBytes);
+                    desc.Default.FsAccessControlData = new FaDataModel(desc.FsAccessControlDescriptor);
+                }
+                if (aciHeader.SacSize > 0)
+                {
+                    byte[] sacBytes = new byte[aciHeader.SacSize];
+                    Buffer.BlockCopy(aciBytes, (int)aciHeader.SacOffset, sacBytes, 0, (int)aciHeader.SacSize);
+
+                    desc.SrvAccessControlDescriptor = SaDescriptorModel.FromNpdmBytes(sacBytes);
+                    desc.Default.SrvAccessControlData = new SaDataModel(desc.SrvAccessControlDescriptor);
+                }
+                if (aciHeader.KcSize > 0)
+                {
+                    byte[] kcBytes = new byte[aciHeader.KcSize];
+                    Buffer.BlockCopy(aciBytes, (int)aciHeader.KcOffset, kcBytes, 0, (int)aciHeader.KcSize);
+
+                    desc.KernelCapabilityDescriptor = KcDescriptorModel.FromNpdmBytes(kcBytes);
+                    desc.Default.KernelCapabilityData = new KcDataModel(desc.KernelCapabilityDescriptor);
+                }
+
+
+                return desc;
+            }
         }
 
-        public static DescModel FromFile(string filePath)
+        public static DescModel FromXml(string filePath)
         {
             try
             {

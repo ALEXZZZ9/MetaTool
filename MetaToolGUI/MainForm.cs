@@ -28,9 +28,7 @@ namespace AX9.MetaToolGUI
 
                     if (inputFile.Extension == ".npdm")
                     {
-                        NpdmModel npdm = await NpdmModel.FromNpdmFile(oFD.FileName);
-
-                        DescModel desc = DescModel.FromNpdm(npdm);
+                        DescModel desc = await DescModel.FromNpdm(oFD.FileName);
 
                         using (SaveFileDialog sFD = new SaveFileDialog
                         {
@@ -65,7 +63,7 @@ namespace AX9.MetaToolGUI
                 {
                     try
                     {
-                        DescModel desc = DescModel.FromFile(oFD.FileName);
+                        DescModel desc = DescModel.FromXml(oFD.FileName);
 
                         new DescEditor(desc, oFD.FileName).Show();
                         this.Hide();

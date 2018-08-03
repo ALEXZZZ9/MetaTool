@@ -33,8 +33,7 @@ namespace AX9.MetaTool.Commands
 
             if (inputFile.Extension == ".npdm")
             {
-                NpdmModel npdm = NpdmModel.FromNpdmFile(inputFile.FullName).Result;
-                DescModel desc = DescModel.FromNpdm(npdm);
+                DescModel desc = DescModel.FromNpdm(inputFile.FullName).Result;
 
                 try
                 {

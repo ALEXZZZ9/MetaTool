@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using AX9.MetaTool.Enums;
 
 namespace AX9.MetaTool.Models
 {
@@ -12,11 +14,11 @@ namespace AX9.MetaTool.Models
         {
             ThreadInfo = descriptor.ThreadInfo;
             EnableSystemCalls = descriptor.EnableSystemCalls;
-            MemoryMap = descriptor.MemoryMap;
+            AllMemoryMap = descriptor.AllMemoryMap;
             EnableInterrupts = descriptor.EnableInterrupts;
             MiscParams = descriptor.MiscParams;
             KernelVersion = descriptor.KernelVersion;
-            HandleTableSize = descriptor.HandleTableSize;
+            HandleTableSizeValue = descriptor.HandleTableSizeValue;
             MiscFlags = descriptor.MiscFlags;
         }
 
@@ -24,11 +26,41 @@ namespace AX9.MetaTool.Models
         [XmlElement("ThreadInfo")]
         public KcThreadInfoModel ThreadInfo { get; set; }
 
+        [XmlIgnore]
+        public List<byte> SystemCallList => EnableSystemCalls?.Select((sc) => sc.SystemCallIdValue).ToList();
+
         [XmlElement("EnableSystemCalls")]
         public List<KcEnableSystemCallsModel> EnableSystemCalls { get; set; }
 
         [XmlElement("MemoryMap")]
-        public List<KcMemoryMapModel> MemoryMap { get; set; }
+        public List<KcMemoryMapModel> AllMemoryMap { get; set; }
+
+        [XmlIgnore]
+        public List<KcMemoryMapModel> MemoryMap
+        {
+            get
+            {
+                if (AllMemoryMap == null || AllMemoryMap.Count == 0) return null;
+
+                return AllMemoryMap
+                    .Where((mm) => !(mm.SizeValue == 4096u && mm.Permission.ToUpper() == MemoryMapPermissionEnum.RW.ToString()))
+                    .ToList();
+            }
+        }
+
+        [XmlIgnore]
+        public List<KcIoMemoryMapModel> IoMemoryMap
+        {
+            get
+            {
+                if (AllMemoryMap == null || AllMemoryMap.Count == 0) return null;
+
+                return AllMemoryMap
+                    .Where((mm) => mm.SizeValue == 4096u && mm.Permission.ToUpper() == MemoryMapPermissionEnum.RW.ToString())
+                    .Select((mm) => new KcIoMemoryMapModel { BeginAddressValue = mm.BeginAddressValue })
+                    .ToList();
+            }
+        }
 
         [XmlElement("EnableInterrupts")]
         public List<string> EnableInterrupts { get; set; }
@@ -40,30 +72,18 @@ namespace AX9.MetaTool.Models
         public KcKernelVersionModel KernelVersion { get; set; }
 
         [XmlIgnore]
-        public ushort HandleTableSizeValue
-        {
-            get => handleTableSizeValue;
-            set
-            {
-                handleTableSize = value.ToString("D");
-                handleTableSizeValue = value;
-            }
-        }
+        public KcHandleTableSizeModel HandleTableSizeValue { get; set; }
 
         [XmlElement("HandleTableSize")]
         public string HandleTableSize
         {
-            get => handleTableSize;
+            get => HandleTableSizeValue?.HandleTableSize.ToString("D");
             set
             {
                 if (value == null) return;
-                
-                var size = checked((ushort)Utils.ConvertDecimalString(value, "KernelCapabilityData/HandleTableSize"));
 
-                if (size >= 1024) throw new ArgumentException("KernelCapabilityData/HandleTableSize is invalid");
-
-                handleTableSizeValue = size;
-                handleTableSize = value;
+                if (HandleTableSizeValue == null) HandleTableSizeValue = new KcHandleTableSizeModel();
+                HandleTableSizeValue.HandleTableSize = checked((ushort)Utils.ConvertDecimalString(value, "KernelCapabilityData/HandleTableSize"));
             }
         }
 
@@ -71,7 +91,25 @@ namespace AX9.MetaTool.Models
         public KcMiscFlags MiscFlags { get; set; }
 
 
-        private ushort handleTableSizeValue;
-        private string handleTableSize;
+        public List<ushort> GetIntList(bool enableEntireInterrupt = false)
+        {
+            if (EnableInterrupts == null || EnableInterrupts.Count == 0) return null;
+
+            List<ushort> intList = new List<ushort>();
+
+            foreach (string interrupt in EnableInterrupts)
+            {
+                ushort interruptValue = (ushort)Utils.ConvertDecimalString(interrupt, "EnableInterrupts");
+
+                if (interruptValue == 0) throw new ArgumentException("Cannot specify 0 for EnableInterrupts.");
+                if (interruptValue >= 1024) throw new ArgumentException($"The value {interruptValue} for EnableInterrupts is outside the scope.");
+                if (intList.Contains(interruptValue)) throw new ArgumentException($"Within EnableInterrupts, {interruptValue} is specified more than once.");
+                if (interruptValue == 1023 && !enableEntireInterrupt) throw new ArgumentException($"The value {interruptValue} for EnableInterrupts is outside the scope.");
+
+                intList.Add(interruptValue);
+            }
+
+            return intList;
+        }
     }
 }

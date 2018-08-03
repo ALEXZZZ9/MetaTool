@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace AX9.MetaTool.Models
@@ -14,6 +15,9 @@ namespace AX9.MetaTool.Models
 
 
         [XmlElement("Entry")]
-        public List<SaEntry> Entries { get; set; }
+        public List<SaEntry> Entries { get; set; } = new List<SaEntry>();
+
+        [XmlIgnore]
+        public int EntriesSize => Entries.Sum((s) => s.BinarySize);
     }
 }

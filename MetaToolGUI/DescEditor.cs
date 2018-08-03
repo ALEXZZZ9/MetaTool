@@ -165,10 +165,8 @@ namespace AX9.MetaToolGUI
                 DEDGV_SrvAccess.Rows.Add(saEntry.Name, saEntry.IsServerValue);
             }
 
-            //DENUD_HighestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue;
-            //DENUD_LowestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue;
-            DENUD_HighestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue;
-            DENUD_LowestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue;
+            DENUD_HighestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue;
+            DENUD_LowestPriority.Value = desc.KernelCapabilityDescriptor.ThreadInfo.LowestPriorityValue;
             DENUD_MaxCoreNumber.Value = desc.KernelCapabilityDescriptor.ThreadInfo.MaxCoreNumberValue;
             DENUD_MinCoreNumber.Value = desc.KernelCapabilityDescriptor.ThreadInfo.MinCoreNumberValue;
 

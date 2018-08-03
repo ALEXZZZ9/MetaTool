@@ -17,7 +17,7 @@ namespace AX9.MetaTool.Models
             get => handleTableSize;
             set
             {
-                if (value >= 1024) throw new ArgumentException("KernelCapabilityDescriptor/HandleTableSize is invalid");
+                if (value >= 1024) throw new ArgumentException("HandleTableSize is invalid");
                 handleTableSize = value;
             }
         }

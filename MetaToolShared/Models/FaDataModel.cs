@@ -11,7 +11,7 @@ namespace AX9.MetaTool.Models
         {
             FlagPresets = descriptor.FlagPresets;
             ContentOwnerIds = descriptor.ContentOwnerIds;
-            SaveDataOwnerIds = descriptor.SaveDataOwnerIdsWithAccesibilities;
+            SaveDataOwnerIds = descriptor.SaveDataOwnerIds;
         }
 
 

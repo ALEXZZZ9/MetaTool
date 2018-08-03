@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AX9.MetaTool.Structs
 {
@@ -29,5 +30,14 @@ namespace AX9.MetaTool.Structs
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         public byte[] Reserved3;
+
+
+        public void Fill()
+        {
+            Magic = Encoding.ASCII.GetBytes("ACI0");
+            Reserved1 = new byte[12];
+            Reserved2 = new byte[8];
+            Reserved3 = new byte[8];
+        }
     }
 }

@@ -9,6 +9,20 @@ namespace AX9.MetaTool.Models
     [XmlRoot("KernelCapabilityDescriptor")]
     public class KcDescriptorModel
     {
+        public KcDescriptorModel() { }
+        public KcDescriptorModel(KcDataModel data)
+        {
+            ThreadInfo = data.ThreadInfo;
+            EnableSystemCalls = data.EnableSystemCalls;
+            AllMemoryMap = data.AllMemoryMap;
+            EnableInterrupts = data.EnableInterrupts;
+            MiscParams = data.MiscParams;
+            KernelVersion = data.KernelVersion;
+            HandleTableSizeValue = data.HandleTableSizeValue;
+            MiscFlags = data.MiscFlags;
+        }
+
+
         [XmlElement("ThreadInfo")]
         public KcThreadInfoModel ThreadInfo { get; set; } = new KcThreadInfoModel();
 
@@ -19,10 +33,33 @@ namespace AX9.MetaTool.Models
         public List<KcEnableSystemCallsModel> EnableSystemCalls { get; set; } = new List<KcEnableSystemCallsModel>();
 
         [XmlElement("MemoryMap")]
-        public List<KcMemoryMapModel> MemoryMap { get; set; }
+        public List<KcMemoryMapModel> AllMemoryMap { get; set; }
 
-        //[XmlElement("IoMemoryMap")]
-        //public List<KcIoMemoryMapModel> IoMemoryMap { get; set; }
+        [XmlIgnore]
+        public List<KcMemoryMapModel> MemoryMap
+        {
+            get
+            {
+                if (AllMemoryMap == null || AllMemoryMap.Count == 0) return null;
+
+                return AllMemoryMap
+                    .Where((mm) => !(mm.SizeValue == 4096u && mm.Permission.ToUpper() == MemoryMapPermissionEnum.RW.ToString()))
+                    .ToList();
+            }
+        }
+
+        [XmlIgnore]
+        public List<KcIoMemoryMapModel> IoMemoryMap {
+            get
+            {
+                if (AllMemoryMap == null || AllMemoryMap.Count == 0) return null;
+
+                return AllMemoryMap
+                    .Where((mm) => mm.SizeValue == 4096u && mm.Permission.ToUpper() == MemoryMapPermissionEnum.RW.ToString())
+                    .Select((mm) => new KcIoMemoryMapModel { BeginAddressValue = mm.BeginAddressValue })
+                    .ToList();
+            }
+        }
 
         [XmlElement("EnableInterrupts")]
         public List<string> EnableInterrupts { get; set; }
@@ -51,6 +88,27 @@ namespace AX9.MetaTool.Models
         [XmlElement("MiscFlags")]
         public KcMiscFlags MiscFlags { get; set; }
 
+
+        public List<ushort> GetIntList(bool enableEntireInterrupt = false)
+        {
+            if (EnableInterrupts == null || EnableInterrupts.Count == 0) return null;
+
+            List<ushort> intList = new List<ushort>();
+
+            foreach (string interrupt in EnableInterrupts)
+            {
+                ushort interruptValue = (ushort)Utils.ConvertDecimalString(interrupt, "EnableInterrupts");
+
+                if (interruptValue == 0) throw new ArgumentException("Cannot specify 0 for EnableInterrupts.");
+                if (interruptValue >= 1024) throw new ArgumentException($"The value {interruptValue} for EnableInterrupts is outside the scope.");
+                if (intList.Contains(interruptValue)) throw new ArgumentException($"Within EnableInterrupts, {interruptValue} is specified more than once.");
+                if (interruptValue == 1023 && !enableEntireInterrupt) throw new ArgumentException($"The value {interruptValue} for EnableInterrupts is outside the scope.");
+
+                intList.Add(interruptValue);
+            }
+
+            return intList;
+        }
 
         // Thanks SciresM for https://github.com/SciresM/hactool/blob/bdbd4f639ec7c1573a74c6c4cfa7b47801f23217/npdm.c#L269
         public static KcDescriptorModel FromNpdmBytes(byte[] bytes)
@@ -88,8 +146,8 @@ namespace AX9.MetaTool.Models
                     case 3: // Kernel flags
                         kcDescriptor.ThreadInfo = new KcThreadInfoModel
                         {
-                            HighestPriorityValue = (byte)(desc & 0x3F),
-                            LowestPriorityValue = (byte)((desc >>= 6) & 0x3F),
+                            LowestPriorityValue = (byte)(desc & 0x3F),
+                            HighestPriorityValue = (byte)((desc >>= 6) & 0x3F),
                             MinCoreNumberValue = (byte)(desc >>= 6 & 0xFF),
                             MaxCoreNumberValue = (byte)(desc >>= 8 & 0xFF)
                         };
@@ -112,7 +170,6 @@ namespace AX9.MetaTool.Models
                                 if (!kcDescriptor.EnableSystemCalls.Contains(sCI))
                                 {
                                     kcDescriptor.EnableSystemCalls.Add(sCI);
-                                    //kcDescriptor.SystemCallList.Add(sCI.SystemCallIdValue);
                                 }
                             }
                          
@@ -120,7 +177,7 @@ namespace AX9.MetaTool.Models
                         }
                         break;
                     case 6: // Map IO/Normal
-                        if (kcDescriptor.MemoryMap == null) kcDescriptor.MemoryMap = new List<KcMemoryMapModel>();
+                        if (kcDescriptor.AllMemoryMap == null) kcDescriptor.AllMemoryMap = new List<KcMemoryMapModel>();
 
                         KcMemoryMapModel mMap = new KcMemoryMapModel
                         {
@@ -139,13 +196,13 @@ namespace AX9.MetaTool.Models
                         mMap.SizeValue = (desc & 0xFFFFF) << KcMemoryMapModel.PageShift;
                         mMap.TypeValue = ((desc >> KcMemoryMapModel.SizeFieldSize) == 0) ? MemoryMapTypeEnum.IO : MemoryMapTypeEnum.STATIC;
 
-                        kcDescriptor.MemoryMap.Add(mMap);
+                        kcDescriptor.AllMemoryMap.Add(mMap);
                         break;
                     case 7: // Map Normal Page
                         //KcIoMemoryMapModel ioMMap = new KcIoMemoryMapModel { BeginAddressValue = desc << 12 };
                         //kcDescriptor.IoMemoryMap.Add(ioMMap);
 
-                         kcDescriptor.MemoryMap.Add(new KcMemoryMapModel
+                         kcDescriptor.AllMemoryMap.Add(new KcMemoryMapModel
                          {
                              BeginAddressValue = desc << 12,
                              PermissionValue = MemoryMapPermissionEnum.RW,
@@ -185,6 +242,240 @@ namespace AX9.MetaTool.Models
             }
 
             return kcDescriptor;
+        }
+
+
+        public byte[] ExportBinary()
+        {
+            List<uint> descriptors = new List<uint>();
+            ExportThreadInfoBinary(descriptors);
+            ExportEnableSystemCallsBinary(descriptors);
+            ExportMemoryMapBinary(descriptors);
+            ExportIoMemoryMapBinary(descriptors);
+            ExportEnableInterruptsBinary(descriptors);
+            ExportMiscParamsBinary(descriptors);
+            ExportKernelVersionBinary(descriptors);
+            ExportHandleTableSizeBinary(descriptors);
+            ExportMiscFlagsBinary(descriptors);
+
+            if (descriptors.Count == 0) return null;
+
+            uint[] descriptorsArray = descriptors.ToArray();
+
+            int length = 4;
+            int index = 0;
+            byte[] bytes = new byte[descriptors.Count * length];
+
+            foreach (uint descriptor in descriptorsArray)
+            {
+                Array.Copy(BitConverter.GetBytes(descriptor), 0, bytes, index, length);
+                index += length;
+            }
+
+            return bytes;
+        }
+
+        public void ExportThreadInfoBinary(List<uint> descriptors)
+        {
+            if (ThreadInfo == null) return;
+            
+            descriptors.Add(ThreadInfo.CalcFlag());
+        }
+        public void ExportEnableSystemCallsBinary(List<uint> descriptors)
+        {
+            if (SystemCallList == null || SystemCallList.Count == 0) return;
+           
+            SystemCallList.Sort();
+            KcEnableSystemCallsModel systemCall = new KcEnableSystemCallsModel();
+
+            foreach (byte b in SystemCallList)
+            {
+                if (systemCall.Index != (b / 24))
+                {
+                    if (systemCall.GetNumIds() > 0) descriptors.Add(systemCall.CalcFlag());
+
+                    systemCall = new KcEnableSystemCallsModel { Index = (b / 24) };
+                }
+                systemCall.AddSystemCallId(b);
+            }
+
+            if (systemCall.GetNumIds() > 0) descriptors.Add(systemCall.CalcFlag());
+        }
+        public void ExportMemoryMapBinary(List<uint> descriptors)
+        {
+            if (MemoryMap == null || MemoryMap.Count == 0) return;
+
+            foreach (KcMemoryMapModel memoryMap in MemoryMap)
+            {
+                descriptors.AddRange(memoryMap.CalcFlag());
+            }
+        }
+        public void ExportIoMemoryMapBinary(List<uint> descriptors)
+        {
+            if (IoMemoryMap == null || IoMemoryMap.Count == 0) return;
+
+            foreach (KcIoMemoryMapModel ioMemoryMap in IoMemoryMap)
+            {
+                descriptors.Add(ioMemoryMap.CalcFlag());
+            }
+        }
+        public void ExportEnableInterruptsBinary(List<uint> descriptors)
+        {
+            List<ushort> intList = GetIntList();
+            if (intList == null || intList.Count == 0) return;
+
+            int i = 0;
+
+            if (intList.Count % 2 != 0)
+            {
+                descriptors.Add(new InterruptModel(intList[0]).CalcFlag());
+                i++;
+            }
+
+            while (i < intList.Count)
+            {
+                InterruptModel interrupt = new InterruptModel(intList[i]);
+
+                if (interrupt[0] == 1023)
+                {
+                    interrupt[1] = 1023;
+                    descriptors.Add(interrupt.CalcFlag());
+                    interrupt[0] = 1023;
+                }
+
+                interrupt[1] = intList[i + 1];
+                descriptors.Add(interrupt.CalcFlag());
+
+                if (interrupt[1] == 1023) descriptors.Add(new InterruptModel(1023, 1023).CalcFlag());
+
+                i += 2;
+            }
+        }
+        public void ExportMiscParamsBinary(List<uint> descriptors)
+        {
+            if (MiscParams == null) return;
+
+            descriptors.Add(MiscParams.CalcFlag());
+        }
+        public void ExportKernelVersionBinary(List<uint> descriptors)
+        {
+            if (KernelVersion == null) return;
+
+            descriptors.Add(KernelVersion.CalcFlag());
+        }
+        public void ExportHandleTableSizeBinary(List<uint> descriptors)
+        {
+            if (HandleTableSizeValue == null) return;
+
+            descriptors.Add(HandleTableSizeValue.CalcFlag());
+        }
+        public void ExportMiscFlagsBinary(List<uint> descriptors)
+        {
+            if (MiscFlags == null) return;
+
+            descriptors.Add(MiscFlags.CalcFlag());
+        }
+
+
+        public void CheckCapabilities(DefaultModel @default)
+        {
+            if (@default == null) return;
+            CheckThreadInfo(@default.KernelCapabilityData.ThreadInfo);
+            CheckEnableSystemCalls(@default.KernelCapabilityData.SystemCallList);
+            CheckMemoryMaps(@default.KernelCapabilityData.AllMemoryMap);
+            CheckEnableInterrupts(@default.KernelCapabilityData.GetIntList());
+            CheckMiscParams(@default.KernelCapabilityData.MiscParams);
+            CheckKernelVersion(@default.KernelCapabilityData.KernelVersion);
+            CheckHandleTableSize(@default.KernelCapabilityData.HandleTableSizeValue);
+            CheckMiscFlags(@default.KernelCapabilityData.MiscFlags);
+        }
+
+        public void CheckThreadInfo(KcThreadInfoModel defaultThreadInfo)
+        {
+            if (ThreadInfo == null) return;
+            if (defaultThreadInfo == null) throw new ArgumentException("ThreadInfo is outside the allowed range.");
+            if (ThreadInfo.LowestPriorityValue < defaultThreadInfo.HighestPriorityValue || ThreadInfo.LowestPriorityValue > defaultThreadInfo.LowestPriorityValue)
+                throw new ArgumentException("ThreadInfo/LowestPriority is outside the allowed range.");
+            if (ThreadInfo.HighestPriorityValue < defaultThreadInfo.HighestPriorityValue || ThreadInfo.HighestPriorityValue > defaultThreadInfo.LowestPriorityValue)
+                throw new ArgumentException("ThreadInfo/HighestPriority is outside the allowed range.");
+            if (ThreadInfo.MinCoreNumberValue < defaultThreadInfo.MinCoreNumberValue || ThreadInfo.MinCoreNumberValue > defaultThreadInfo.MaxCoreNumberValue)
+                throw new ArgumentException("ThreadInfo/MinCoreNumber is outside the allowed range.");
+            if (ThreadInfo.MaxCoreNumberValue < defaultThreadInfo.MinCoreNumberValue || ThreadInfo.MaxCoreNumberValue > defaultThreadInfo.MaxCoreNumberValue)
+                throw new ArgumentException("ThreadInfo/MaxCoreNumber is outside the allowed range.");
+        }
+        public void CheckEnableSystemCalls(List<byte> defaultSystemCallList)
+        {
+            if (defaultSystemCallList == null || SystemCallList == null) return;
+
+            foreach (byte b in SystemCallList)
+            {
+                if (defaultSystemCallList.IndexOf(b) < 0) throw new ArgumentException($"The {b} value for EnableSystemCalls is not allowed.");
+            }
+        }
+        public void CheckMemoryMaps(List<KcMemoryMapModel> defaultMemoryMap)
+        {
+            if (MemoryMap == null || MemoryMap.Count == 0) return;
+
+            foreach (KcMemoryMapModel mMap in AllMemoryMap)
+            {
+                bool flag = false;
+                foreach (KcMemoryMapModel dMMap in defaultMemoryMap)
+                {
+                    if (mMap.BeginAddressValue >= dMMap.BeginAddressValue && 
+                        mMap.BeginAddressValue + mMap.SizeValue - 1 <= dMMap.BeginAddressValue + dMMap.SizeValue - 1 && 
+                        mMap.PermissionValue == dMMap.PermissionValue && mMap.TypeValue == dMMap.TypeValue)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                    throw new ArgumentException($"The KernelCapabilityData/MemoryMap value is outside the allowed range. (BaseAddress={mMap.BeginAddress}, Size={mMap.Size}, Permission={mMap.Permission}, Type={mMap.Type})");
+            }
+        }
+        public void CheckEnableInterrupts(List<ushort> defaultInterrupts)
+        {
+            List<ushort> intList = GetIntList();
+            if (intList == null || intList.Count == 0) return;
+
+            if (defaultInterrupts.IndexOf(1023) >= 0) return;
+
+            foreach (ushort interrupt in intList)
+            {
+                if (interrupt != 1023 && defaultInterrupts.IndexOf(interrupt) < 0)
+                {
+                    throw new ArgumentException($"The {interrupt} value for EnableInterrupts is not allowed.");
+                }
+            }
+        }
+        public void CheckMiscParams(KcMiscParamsModel defaultMiscParams)
+        {
+            if (MiscParams == null) return;
+
+            if (defaultMiscParams == null) throw new ArgumentException("MiscParams is outside the allowed range.");
+            if (MiscParams.ProgramType != defaultMiscParams.ProgramType) throw new ArgumentException("MiscParams/ProgramType is outside the allowed range.");
+        }
+        public void CheckKernelVersion(KcKernelVersionModel defaultKernelVersion)
+        {
+            if (KernelVersion == null) return;
+
+            if (defaultKernelVersion == null || KernelVersion.MajorVersion != defaultKernelVersion.MajorVersion || KernelVersion.MinorVersion != defaultKernelVersion.MinorVersion)
+                throw new ArgumentException("KernelVersion is outside the allowed range.");
+        }
+        public void CheckHandleTableSize(KcHandleTableSizeModel defaultHandleTableSize)
+        {
+            if (HandleTableSizeValue == null) return;
+
+            if (defaultHandleTableSize == null || HandleTableSizeValue.HandleTableSize > defaultHandleTableSize.HandleTableSize)
+                throw new ArgumentException("KernelCapabilityData/HandleTableSize is outside the allowed range.");
+        }
+        public void CheckMiscFlags(KcMiscFlags defaultMiscFlags)
+        {
+            if (MiscFlags == null) return;
+
+            if (defaultMiscFlags == null) throw new ArgumentException("MiscFlags is outside the allowed range.");
+            if (MiscFlags.EnableDebugValue && !defaultMiscFlags.EnableDebugValue) throw new ArgumentException("MiscFlags/EnableDebug is outside the allowed range.");
+            if (MiscFlags.ForceDebugValue && !defaultMiscFlags.ForceDebugValue) throw new ArgumentException("MiscFlags/ForceDebug is outside the allowed range.");
         }
     }
 }
