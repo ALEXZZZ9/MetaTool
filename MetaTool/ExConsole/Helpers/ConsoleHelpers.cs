@@ -47,7 +47,6 @@ namespace AX9.MetaTool.ExConsole.Helpers
             if (!string.IsNullOrEmpty(message)) Console.WriteLine(indent ? message.Indent(indentCount, true) : message);
         }
 
-
         public static string Indent(this string text, int count, bool multiline)
         {
             if (multiline)

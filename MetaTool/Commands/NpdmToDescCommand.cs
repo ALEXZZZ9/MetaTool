@@ -1,6 +1,6 @@
-﻿using AX9.MetaTool.ExConsole;
-using System;
+﻿using System;
 using System.IO;
+using AX9.MetaTool.ExConsole;
 using AX9.MetaTool.Models;
 
 namespace AX9.MetaTool.Commands
@@ -10,46 +10,29 @@ namespace AX9.MetaTool.Commands
     {
         public override string Execute(params string[] args)
         {
-            string npdmFilePath = GetValue<string>(args, 0, "npdmFilePath");
+            FileInfo npdmFile = new FileInfo(GetValue<string>(args, 0, "npdmFilePath"));
             string descFilePath = GetValue<string>(args, 1);
+            FileInfo descFile = new FileInfo(string.IsNullOrEmpty(descFilePath) ? Path.ChangeExtension(npdmFile.FullName, ".desc") : descFilePath);
 
-            string appPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            FileInfo inputFile = new FileInfo((Path.IsPathRooted(npdmFilePath)) ? npdmFilePath : Path.Combine(appPath, npdmFilePath));
-            if (!inputFile.Exists) throw new CommandException("npdm File Not Found");
+            if (!npdmFile.Exists) throw new CommandException("Desc Not Found");
 
-            if (string.IsNullOrEmpty(descFilePath))
+            if (!descFile.Exists && Directory.Exists(descFile.FullName) && descFile.Attributes.HasFlag(FileAttributes.Directory))
             {
-                descFilePath = Path.ChangeExtension(inputFile.FullName, ".desc");
-            }
-            else
-            {
-                try
-                {
-                    if (File.GetAttributes(descFilePath).HasFlag(FileAttributes.Directory)) descFilePath = Path.Combine(descFilePath, Path.ChangeExtension(inputFile.Name, ".desc"));
-                } catch { }
-
-                if (!Path.IsPathRooted(descFilePath)) descFilePath = Path.Combine(appPath, descFilePath);
+                descFile = new FileInfo(Path.Combine(descFile.FullName, Path.ChangeExtension(npdmFile.Name, ".desc")));
             }
 
-            if (inputFile.Extension == ".npdm")
+            try
             {
-                DescModel desc = DescModel.FromNpdm(inputFile.FullName).Result;
+                DescModel desc = DescModel.FromNpdm(npdmFile.FullName).Result;
 
-                try
-                {
-                    File.WriteAllText(descFilePath, desc.XMLSerialize());
-                }
-                catch (Exception ex)
-                {
-                    throw new CommandException(ex.Message);
-                }
+                File.WriteAllText(descFile.FullName, desc.XMLSerialize());
             }
-            else
+            catch (Exception ex)
             {
-                throw new NotImplementedException("The file format is not yet supported");
+                throw new CommandException(ex.Message);
             }
 
-            return $"Done {descFilePath}";
+            return $"Done {descFile.FullName}";
         }
     }
 }
