@@ -83,6 +83,26 @@
             this.DEB_Save = new System.Windows.Forms.Button();
             this.DEB_SaveAs = new System.Windows.Forms.Button();
             this.DEB_UpdateAcid = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.DETB_Signature = new System.Windows.Forms.TextBox();
+            this.DETB_RSAModulus = new System.Windows.Forms.TextBox();
+            this.DETB_RSAExponent = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.DETB_RSAP = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.DETB_RSAQ = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.DETB_RSADP = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.DETB_RSADQ = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.DETB_RSAInverseQ = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.DETB_RSAD = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MemoryRegion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DEDGV_SrvAccess)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -100,6 +120,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadPriority)).BeginInit();
+            this.groupBox7.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -170,12 +192,11 @@
             this.DETB_Acid.Location = new System.Drawing.Point(5, 436);
             this.DETB_Acid.Multiline = true;
             this.DETB_Acid.Name = "DETB_Acid";
-            this.DETB_Acid.Size = new System.Drawing.Size(310, 83);
+            this.DETB_Acid.Size = new System.Drawing.Size(310, 80);
             this.DETB_Acid.TabIndex = 10;
             // 
             // DECB_AcidType
             // 
-            this.DECB_AcidType.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.DECB_AcidType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DECB_AcidType.FormattingEnabled = true;
             this.DECB_AcidType.Location = new System.Drawing.Point(113, 409);
@@ -186,12 +207,12 @@
             // 
             // label5
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label5.Location = new System.Drawing.Point(5, 412);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(100, 20);
             this.label5.TabIndex = 12;
             this.label5.Text = "Acid:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // DEDGV_SrvAccess
             // 
@@ -727,7 +748,8 @@
             // 
             // DEB_Save
             // 
-            this.DEB_Save.Location = new System.Drawing.Point(242, 522);
+            this.DEB_Save.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.DEB_Save.Location = new System.Drawing.Point(402, 522);
             this.DEB_Save.Name = "DEB_Save";
             this.DEB_Save.Size = new System.Drawing.Size(75, 23);
             this.DEB_Save.TabIndex = 23;
@@ -737,7 +759,8 @@
             // 
             // DEB_SaveAs
             // 
-            this.DEB_SaveAs.Location = new System.Drawing.Point(317, 522);
+            this.DEB_SaveAs.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.DEB_SaveAs.Location = new System.Drawing.Point(477, 522);
             this.DEB_SaveAs.Name = "DEB_SaveAs";
             this.DEB_SaveAs.Size = new System.Drawing.Size(75, 23);
             this.DEB_SaveAs.TabIndex = 24;
@@ -755,11 +778,194 @@
             this.DEB_UpdateAcid.UseVisualStyleBackColor = true;
             this.DEB_UpdateAcid.Click += new System.EventHandler(this.DEB_UpdateAcid_Click);
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label25);
+            this.groupBox7.Controls.Add(this.DETB_Signature);
+            this.groupBox7.Controls.Add(this.groupBox10);
+            this.groupBox7.Location = new System.Drawing.Point(635, 14);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.groupBox7.Size = new System.Drawing.Size(310, 505);
+            this.groupBox7.TabIndex = 36;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Sign";
+            // 
+            // label25
+            // 
+            this.label25.Location = new System.Drawing.Point(5, 369);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(93, 20);
+            this.label25.TabIndex = 23;
+            this.label25.Text = "Signature:";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox10.Controls.Add(this.label26);
+            this.groupBox10.Controls.Add(this.DETB_RSAD);
+            this.groupBox10.Controls.Add(this.label24);
+            this.groupBox10.Controls.Add(this.DETB_RSAInverseQ);
+            this.groupBox10.Controls.Add(this.label23);
+            this.groupBox10.Controls.Add(this.DETB_RSADQ);
+            this.groupBox10.Controls.Add(this.label22);
+            this.groupBox10.Controls.Add(this.DETB_RSADP);
+            this.groupBox10.Controls.Add(this.label21);
+            this.groupBox10.Controls.Add(this.DETB_RSAQ);
+            this.groupBox10.Controls.Add(this.label20);
+            this.groupBox10.Controls.Add(this.DETB_RSAP);
+            this.groupBox10.Controls.Add(this.label19);
+            this.groupBox10.Controls.Add(this.DETB_RSAExponent);
+            this.groupBox10.Controls.Add(this.DETB_RSAModulus);
+            this.groupBox10.Controls.Add(this.label30);
+            this.groupBox10.Location = new System.Drawing.Point(5, 15);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(300, 352);
+            this.groupBox10.TabIndex = 23;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "RSA Key";
+            // 
+            // label30
+            // 
+            this.label30.Location = new System.Drawing.Point(6, 15);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(77, 20);
+            this.label30.TabIndex = 23;
+            this.label30.Text = "Exponent:";
+            // 
+            // DETB_Signature
+            // 
+            this.DETB_Signature.Location = new System.Drawing.Point(5, 393);
+            this.DETB_Signature.Name = "DETB_Signature";
+            this.DETB_Signature.Size = new System.Drawing.Size(300, 20);
+            this.DETB_Signature.TabIndex = 37;
+            // 
+            // DETB_RSAModulus
+            // 
+            this.DETB_RSAModulus.Location = new System.Drawing.Point(5, 58);
+            this.DETB_RSAModulus.Name = "DETB_RSAModulus";
+            this.DETB_RSAModulus.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSAModulus.TabIndex = 38;
+            // 
+            // DETB_RSAExponent
+            // 
+            this.DETB_RSAExponent.Location = new System.Drawing.Point(90, 15);
+            this.DETB_RSAExponent.Name = "DETB_RSAExponent";
+            this.DETB_RSAExponent.Size = new System.Drawing.Size(205, 20);
+            this.DETB_RSAExponent.TabIndex = 39;
+            // 
+            // label19
+            // 
+            this.label19.Location = new System.Drawing.Point(6, 35);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(77, 20);
+            this.label19.TabIndex = 40;
+            this.label19.Text = "Modulus:";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // label20
+            // 
+            this.label20.Location = new System.Drawing.Point(6, 80);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(77, 20);
+            this.label20.TabIndex = 42;
+            this.label20.Text = "P:";
+            this.label20.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSAP
+            // 
+            this.DETB_RSAP.Location = new System.Drawing.Point(5, 103);
+            this.DETB_RSAP.Name = "DETB_RSAP";
+            this.DETB_RSAP.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSAP.TabIndex = 41;
+            // 
+            // label21
+            // 
+            this.label21.Location = new System.Drawing.Point(6, 125);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(77, 20);
+            this.label21.TabIndex = 44;
+            this.label21.Text = "Q:";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSAQ
+            // 
+            this.DETB_RSAQ.Location = new System.Drawing.Point(5, 148);
+            this.DETB_RSAQ.Name = "DETB_RSAQ";
+            this.DETB_RSAQ.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSAQ.TabIndex = 43;
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(6, 170);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(77, 20);
+            this.label22.TabIndex = 46;
+            this.label22.Text = "DP:";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSADP
+            // 
+            this.DETB_RSADP.Location = new System.Drawing.Point(5, 193);
+            this.DETB_RSADP.Name = "DETB_RSADP";
+            this.DETB_RSADP.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSADP.TabIndex = 45;
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(6, 215);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(77, 20);
+            this.label23.TabIndex = 48;
+            this.label23.Text = "DQ:";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSADQ
+            // 
+            this.DETB_RSADQ.Location = new System.Drawing.Point(5, 238);
+            this.DETB_RSADQ.Name = "DETB_RSADQ";
+            this.DETB_RSADQ.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSADQ.TabIndex = 47;
+            // 
+            // label24
+            // 
+            this.label24.Location = new System.Drawing.Point(6, 260);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(77, 20);
+            this.label24.TabIndex = 50;
+            this.label24.Text = "InverseQ:";
+            this.label24.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSAInverseQ
+            // 
+            this.DETB_RSAInverseQ.Location = new System.Drawing.Point(5, 283);
+            this.DETB_RSAInverseQ.Name = "DETB_RSAInverseQ";
+            this.DETB_RSAInverseQ.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSAInverseQ.TabIndex = 49;
+            // 
+            // label26
+            // 
+            this.label26.Location = new System.Drawing.Point(6, 305);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(77, 20);
+            this.label26.TabIndex = 52;
+            this.label26.Text = "D:";
+            this.label26.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // DETB_RSAD
+            // 
+            this.DETB_RSAD.Location = new System.Drawing.Point(5, 328);
+            this.DETB_RSAD.Name = "DETB_RSAD";
+            this.DETB_RSAD.Size = new System.Drawing.Size(290, 20);
+            this.DETB_RSAD.TabIndex = 51;
+            // 
             // DescEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 546);
+            this.ClientSize = new System.Drawing.Size(954, 546);
+            this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.DEB_UpdateAcid);
             this.Controls.Add(this.DEB_SaveAs);
             this.Controls.Add(this.DEB_Save);
@@ -800,6 +1006,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_LowestPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_HighestPriority)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DENUD_MainThreadPriority)).EndInit();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -861,5 +1071,25 @@
         private System.Windows.Forms.Button DEB_Save;
         private System.Windows.Forms.Button DEB_SaveAs;
         private System.Windows.Forms.Button DEB_UpdateAcid;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.TextBox DETB_Signature;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox DETB_RSAModulus;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox DETB_RSAD;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox DETB_RSAInverseQ;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox DETB_RSADQ;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox DETB_RSADP;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox DETB_RSAQ;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox DETB_RSAP;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox DETB_RSAExponent;
     }
 }

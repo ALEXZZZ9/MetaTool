@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using AX9.MetaTool;
 using AX9.MetaTool.Enums;
@@ -205,6 +206,17 @@ namespace AX9.MetaToolGUI
             DENUD_MainThreadPriority.Value = desc.Default.MainThreadPriorityValue;
             DENUD_MainThreadCoreNumber.Value = desc.Default.MainThreadCoreNumberValue;
             DETB_MainThreadStackSize.Text = desc.Default.MainThreadStackSize;
+
+            if (desc.RSAKeyValue.Exponent.Length > 0) DETB_RSAExponent.Text = Convert.ToBase64String(desc.RSAKeyValue.Exponent);
+            if (desc.RSAKeyValue.Modulus.Length > 0) DETB_RSAModulus.Text = Convert.ToBase64String(desc.RSAKeyValue.Modulus);
+            if (desc.RSAKeyValue.P.Length > 0) DETB_RSAP.Text = Convert.ToBase64String(desc.RSAKeyValue.P);
+            if (desc.RSAKeyValue.Q.Length > 0) DETB_RSAQ.Text = Convert.ToBase64String(desc.RSAKeyValue.Q);
+            if (desc.RSAKeyValue.DP.Length > 0) DETB_RSADP.Text = Convert.ToBase64String(desc.RSAKeyValue.DP);
+            if (desc.RSAKeyValue.DQ.Length > 0) DETB_RSADQ.Text = Convert.ToBase64String(desc.RSAKeyValue.DQ);
+            if (desc.RSAKeyValue.InverseQ.Length > 0) DETB_RSAInverseQ.Text = Convert.ToBase64String(desc.RSAKeyValue.InverseQ);
+            if (desc.RSAKeyValue.D.Length > 0) DETB_RSAD.Text = Convert.ToBase64String(desc.RSAKeyValue.D);
+
+            DETB_Signature.Text = desc.Signature;
         }
 
         private void UIToDesc()
@@ -263,6 +275,20 @@ namespace AX9.MetaToolGUI
             desc.Default.FsAccessControlData = new FaDataModel(desc.FsAccessControlDescriptor);
             desc.Default.SrvAccessControlData = new SaDataModel(desc.SrvAccessControlDescriptor);
             desc.Default.KernelCapabilityData = new KcDataModel(desc.KernelCapabilityDescriptor);
+
+            desc.RSAKeyValue = new RSAParameters
+            {
+                Exponent = (!string.IsNullOrEmpty(DETB_RSAExponent.Text)) ? Convert.FromBase64String(DETB_RSAExponent.Text) : null,
+                Modulus = (!string.IsNullOrEmpty(DETB_RSAModulus.Text)) ? Convert.FromBase64String(DETB_RSAModulus.Text) : null,
+                P = (!string.IsNullOrEmpty(DETB_RSAP.Text)) ? Convert.FromBase64String(DETB_RSAP.Text) : null,
+                Q = (!string.IsNullOrEmpty(DETB_RSAQ.Text)) ? Convert.FromBase64String(DETB_RSAQ.Text) : null,
+                DP = (!string.IsNullOrEmpty(DETB_RSADP.Text)) ? Convert.FromBase64String(DETB_RSADP.Text) : null,
+                DQ = (!string.IsNullOrEmpty(DETB_RSADQ.Text)) ? Convert.FromBase64String(DETB_RSADQ.Text) : null,
+                InverseQ = (!string.IsNullOrEmpty(DETB_RSAInverseQ.Text)) ? Convert.FromBase64String(DETB_RSAInverseQ.Text) : null,
+                D = (!string.IsNullOrEmpty(DETB_RSAD.Text)) ? Convert.FromBase64String(DETB_RSAD.Text) : null
+            };
+
+            desc.Signature = (!string.IsNullOrEmpty(DETB_Signature.Text)) ? DETB_Signature.Text : null;
         }
 
         private void GenerateAcid()
