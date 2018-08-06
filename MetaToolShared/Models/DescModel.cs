@@ -96,6 +96,9 @@ namespace AX9.MetaTool.Models
         [XmlElement("Acid", IsNullable = false)]
         public string Acid { get; set; }
 
+        [XmlElement("Signature")]
+        public string Signature { get; set; }
+
         [XmlIgnore]
         public AciHeader AciHeader;
         [XmlIgnore]
@@ -145,6 +148,7 @@ namespace AX9.MetaTool.Models
                     },
                     RSAKeyValue = new RSAParameters { Modulus = acidHeader.Modulus },
                     Acid = Convert.ToBase64String(acidBytes),
+                    Signature = Convert.ToBase64String(acidHeader.Signature),
                     AciHeader = aciHeader,
                     AcidHeader = acidHeader
                 };

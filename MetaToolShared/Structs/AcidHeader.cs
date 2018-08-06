@@ -49,6 +49,11 @@ namespace AX9.MetaTool.Structs
         public void Fill(DescModel desc)
         {
             Signature = new byte[0x100];
+            if (!string.IsNullOrEmpty(desc.Signature))
+            {
+                byte[] signature = Convert.FromBase64String(desc.Signature);
+                Array.Copy(signature, Signature, signature.Length);
+            }
             Modulus = new byte[0x100];
             if (desc.RSAKeyValue.Modulus != null)
             {
