@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Commands\Default\HelpCommand.cs" />
     <Compile Include="Commands\Default\ExitCommand.cs" />
+    <Compile Include="Commands\UpdateAcidCommand.cs" />
+    <Compile Include="Commands\MakeNpdmCommand.cs" />
     <Compile Include="Commands\NpdmToDescCommand.cs" />
     <Compile Include="ExConsole\Command.cs" />
     <Compile Include="ExConsole\CommandAttribute.cs" />
