@@ -207,16 +207,16 @@ namespace AX9.MetaToolGUI
             DENUD_MainThreadCoreNumber.Value = desc.Default.MainThreadCoreNumberValue;
             DETB_MainThreadStackSize.Text = desc.Default.MainThreadStackSize;
 
-            if (desc.RSAKeyValue.Exponent.Length > 0) DETB_RSAExponent.Text = Convert.ToBase64String(desc.RSAKeyValue.Exponent);
-            if (desc.RSAKeyValue.Modulus.Length > 0) DETB_RSAModulus.Text = Convert.ToBase64String(desc.RSAKeyValue.Modulus);
-            if (desc.RSAKeyValue.P.Length > 0) DETB_RSAP.Text = Convert.ToBase64String(desc.RSAKeyValue.P);
-            if (desc.RSAKeyValue.Q.Length > 0) DETB_RSAQ.Text = Convert.ToBase64String(desc.RSAKeyValue.Q);
-            if (desc.RSAKeyValue.DP.Length > 0) DETB_RSADP.Text = Convert.ToBase64String(desc.RSAKeyValue.DP);
-            if (desc.RSAKeyValue.DQ.Length > 0) DETB_RSADQ.Text = Convert.ToBase64String(desc.RSAKeyValue.DQ);
-            if (desc.RSAKeyValue.InverseQ.Length > 0) DETB_RSAInverseQ.Text = Convert.ToBase64String(desc.RSAKeyValue.InverseQ);
-            if (desc.RSAKeyValue.D.Length > 0) DETB_RSAD.Text = Convert.ToBase64String(desc.RSAKeyValue.D);
+            if (desc.RSAKeyValue.Exponent != null) DETB_RSAExponent.Text = Convert.ToBase64String(desc.RSAKeyValue.Exponent);
+            if (desc.RSAKeyValue.Modulus != null) DETB_RSAModulus.Text = Convert.ToBase64String(desc.RSAKeyValue.Modulus);
+            if (desc.RSAKeyValue.P != null) DETB_RSAP.Text = Convert.ToBase64String(desc.RSAKeyValue.P);
+            if (desc.RSAKeyValue.Q != null) DETB_RSAQ.Text = Convert.ToBase64String(desc.RSAKeyValue.Q);
+            if (desc.RSAKeyValue.DP != null) DETB_RSADP.Text = Convert.ToBase64String(desc.RSAKeyValue.DP);
+            if (desc.RSAKeyValue.DQ != null) DETB_RSADQ.Text = Convert.ToBase64String(desc.RSAKeyValue.DQ);
+            if (desc.RSAKeyValue.InverseQ != null) DETB_RSAInverseQ.Text = Convert.ToBase64String(desc.RSAKeyValue.InverseQ);
+            if (desc.RSAKeyValue.D != null) DETB_RSAD.Text = Convert.ToBase64String(desc.RSAKeyValue.D);
 
-            DETB_Signature.Text = desc.Signature;
+            if (desc.Signature != null) DETB_Signature.Text = desc.Signature;
         }
 
         private void UIToDesc()
@@ -236,7 +236,7 @@ namespace AX9.MetaToolGUI
             desc.SrvAccessControlDescriptor.Entries.Clear();
             foreach (DataGridViewRow saEntry in DEDGV_SrvAccess.Rows)
             {
-                if (!saEntry.IsNewRow && !string.IsNullOrEmpty((string)saEntry.Cells[0].Value)) desc.SrvAccessControlDescriptor.Entries.Add(new SaEntry { IsServerValue = (bool)saEntry.Cells[1].Value, Name = (string)saEntry.Cells[0].Value });
+                if (!saEntry.IsNewRow && !string.IsNullOrEmpty((string)saEntry.Cells[0].Value)) desc.SrvAccessControlDescriptor.Entries.Add(new SaEntry { IsServerValue = (bool)(saEntry.Cells[1].Value ?? false), Name = (string)saEntry.Cells[0].Value });
             }
 
             desc.KernelCapabilityDescriptor.ThreadInfo.HighestPriorityValue = (byte)DENUD_HighestPriority.Value;
