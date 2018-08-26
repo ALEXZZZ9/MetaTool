@@ -22,11 +22,15 @@ namespace AX9.MetaTool.Models
         {
             try
             {
-                MetaModel desc = Utils.XMLDeserialize<MetaModel>(filePath);
-
-                return desc;
+                return Utils.XMLDeserialize<MetaModel>(filePath);
             }
-            catch (Exception ex)
+            catch { }
+
+            try
+            {
+                return Utils.XMLDeserialize<NintendoSdkMetaModel>(filePath);
+            }
+            catch (Exception)
             {
                 throw new Exception($"File {filePath} is corrupted or is not a Meta file");
             }
