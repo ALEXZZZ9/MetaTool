@@ -19,7 +19,7 @@ namespace AX9.MetaTool
 
             if (args.Length > 0)
             {
-                ConsoleHelpers.WriteLine(ConsoleDatabase.ExecuteCommand(string.Join(" ", args)), true);
+                ConsoleHelpers.WriteLine(ConsoleDatabase.ExecuteCommand(args[0], ((args.Length > 1) ? args.Skip(1).ToArray() : new string[0])), true);
                 return;
             }
 
