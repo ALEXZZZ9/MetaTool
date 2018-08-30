@@ -14,7 +14,7 @@ namespace AX9.MetaTool.Commands
             string descFilePath = GetValue<string>(args, 1);
             FileInfo descFile = new FileInfo(string.IsNullOrEmpty(descFilePath) ? Path.ChangeExtension(npdmFile.FullName, ".desc") : descFilePath);
 
-            if (!npdmFile.Exists) throw new CommandException("Desc Not Found");
+            if (!npdmFile.Exists) throw new CommandException("Npdm Not Found");
 
             if (!descFile.Exists && Directory.Exists(descFile.FullName) && descFile.Attributes.HasFlag(FileAttributes.Directory))
             {
